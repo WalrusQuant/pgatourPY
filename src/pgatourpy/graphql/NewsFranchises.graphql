@@ -1,0 +1,6 @@
+query NewsFranchises($tourCode: String, $allFranchises: Boolean) {
+  newsFranchises(tourCode: $tourCode, allFranchises: $allFranchises) {
+    franchise
+    franchiseLabel
+  }
+}

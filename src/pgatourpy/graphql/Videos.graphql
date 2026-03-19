@@ -1,0 +1,49 @@
+query Videos($tournamentId: String, $playerIds: [String!], $category: String, $franchise: String, $franchises: [String!], $tourCode: TourCode, $season: String, $limit: Int, $offset: Int, $holeNumber: String, $rating: Int) {
+  videos(
+    tournamentId: $tournamentId
+    playerIds: $playerIds
+    category: $category
+    franchise: $franchise
+    franchises: $franchises
+    tourCode: $tourCode
+    season: $season
+    limit: $limit
+    offset: $offset
+    holeNumber: $holeNumber
+    rating: $rating
+  ) {
+    ...VideoFragment
+  }
+}
+
+fragment VideoFragment on Video {
+  category
+  categoryDisplayName
+  created
+  description
+  duration
+  franchise
+  franchiseDisplayName
+  holeNumber
+  id
+  playerVideos {
+    firstName
+    id
+    lastName
+    shortName
+  }
+  poster
+  pubdate
+  roundNumber
+  shareUrl
+  shotNumber
+  startsAt
+  endsAt
+  thumbnail
+  title
+  tournamentId
+  tourCode
+  year
+  pinned
+  contentTournamentId
+}

@@ -1,0 +1,64 @@
+query NewsArticles($tour: TourCode, $franchises: [String!], $playerIds: [ID!], $limit: Int, $offset: Int, $tags: [String!], $sectionName: String) {
+  newsArticles(
+    tour: $tour
+    franchises: $franchises
+    playerIds: $playerIds
+    limit: $limit
+    offset: $offset
+    tags: $tags
+    sectionName: $sectionName
+  ) {
+    articles {
+      ...NewsArticleFragment
+    }
+    franchiseSponsors {
+      franchise
+      image
+      label
+      accessibilityText
+      backgroundColor
+    }
+    integratedComponents {
+      index
+      partner
+    }
+  }
+}
+
+fragment NewsArticleFragment on NewsArticle {
+  id
+  analyticsTags
+  contentTournamentIds
+  dateTextOverride
+  aiGenerated
+  isLive
+  headline
+  teaserHeadline
+  teaserContent
+  articleImage
+  url
+  publishDate
+  updateDate
+  franchise
+  franchiseDisplayName
+  shareURL
+  sponsor {
+    name
+    description
+    logo
+    image
+    websiteUrl
+  }
+  brightcoveId
+  externalLinkOverride
+  players {
+    id
+    name
+  }
+  teaserImageOverride
+  author {
+    firstName
+    lastName
+  }
+  articleFormType
+}

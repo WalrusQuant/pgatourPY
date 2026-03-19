@@ -1,0 +1,70 @@
+query Tournaments($ids: [ID!]) {
+  tournaments(ids: $ids) {
+    ...TournamentFragment
+  }
+}
+
+fragment TournamentFragment on Tournament {
+  id
+  tournamentName
+  tournamentLogo
+  tournamentLocation
+  tournamentStatus
+  roundStatusDisplay
+  roundDisplay
+  roundStatus
+  roundStatusColor
+  currentRound
+  timezone
+  pdfUrl
+  seasonYear
+  displayDate
+  country
+  state
+  city
+  scoredLevel
+  events {
+    id
+    eventName
+    leaderboardId
+  }
+  courses {
+    id
+    courseName
+    courseCode
+    hostCourse
+    scoringLevel
+  }
+  weather {
+    logo
+    logoDark
+    logoAccessibility
+    tempF
+    tempC
+    condition
+    windDirection
+    windSpeedMPH
+    windSpeedKPH
+    precipitation
+    humidity
+  }
+  ticketsURL
+  tournamentSiteURL
+  formatType
+  features
+  conductedByLabel
+  conductedByLink
+  beautyImage
+  hideRolexClock
+  hideSov
+  headshotBaseUrl
+  shouldSubscribe
+  ticketsEnabled
+  useTournamentSiteURL
+  tournamentCategoryInfo {
+    type
+    logoLight
+    logoDark
+    label
+  }
+}

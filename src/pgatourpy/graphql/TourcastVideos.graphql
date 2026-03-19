@@ -1,0 +1,43 @@
+query TourcastVideos($tournamentId: ID!, $playerId: ID!, $round: Int!, $hole: Int, $shot: Int) {
+  tourcastVideos(
+    tournamentId: $tournamentId
+    playerId: $playerId
+    round: $round
+    hole: $hole
+    shot: $shot
+  ) {
+    ...VideoFragment
+  }
+}
+
+fragment VideoFragment on Video {
+  category
+  categoryDisplayName
+  created
+  description
+  duration
+  franchise
+  franchiseDisplayName
+  holeNumber
+  id
+  playerVideos {
+    firstName
+    id
+    lastName
+    shortName
+  }
+  poster
+  pubdate
+  roundNumber
+  shareUrl
+  shotNumber
+  startsAt
+  endsAt
+  thumbnail
+  title
+  tournamentId
+  tourCode
+  year
+  pinned
+  contentTournamentId
+}

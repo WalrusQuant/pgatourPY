@@ -1,0 +1,32 @@
+query Coverage($tournamentId: ID!) {
+  coverage(tournamentId: $tournamentId) {
+    id
+    coverageType {
+      __typename
+      ... on BroadcastFullTelecast {
+        id
+        streamTitle
+        roundNumber
+        startTime
+        endTime
+        liveStatus
+      }
+      ... on BroadcastFeaturedGroup {
+        id
+        streamTitle
+        roundNumber
+        startTime
+        endTime
+        liveStatus
+      }
+      ... on BroadcastFeaturedHole {
+        id
+        streamTitle
+        roundNumber
+        startTime
+        endTime
+        liveStatus
+      }
+    }
+  }
+}

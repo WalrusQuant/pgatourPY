@@ -1,0 +1,6 @@
+query oddsToWinCompressed($tournamentId: ID!) {
+  oddsToWinCompressed(oddsToWinId: $tournamentId) {
+    id
+    payload
+  }
+}

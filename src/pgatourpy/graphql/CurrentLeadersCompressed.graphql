@@ -1,0 +1,6 @@
+query CurrentLeadersCompressed($tournamentId: ID!) {
+  currentLeadersCompressed(tournamentId: $tournamentId) {
+    id
+    payload
+  }
+}

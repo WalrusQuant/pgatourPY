@@ -1,0 +1,14 @@
+query ScorecardStatsComparisonCategories($tournamentId: String!, $playerIds: [String!]!, $category: PlayerComparisonCategory!) {
+  scorecardStatsComparison(
+    tournamentId: $tournamentId
+    playerIds: $playerIds
+    category: $category
+  ) {
+    tournamentId
+    category
+    categoryPills {
+      displayText
+      category
+    }
+  }
+}
