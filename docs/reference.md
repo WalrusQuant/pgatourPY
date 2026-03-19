@@ -32,6 +32,20 @@
 
 ::: pgatourpy.pga_schedule
 
+## Player Profiles
+
+::: pgatourpy.pga_player_profile
+
+::: pgatourpy.pga_player_career
+
+::: pgatourpy.pga_player_results
+
+::: pgatourpy.pga_player_stats
+
+::: pgatourpy.pga_player_bio
+
+::: pgatourpy.pga_player_tournament_status
+
 ## Content
 
 ::: pgatourpy.pga_news

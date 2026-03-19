@@ -1,0 +1,21 @@
+query getPlayerTournamentStatus($playerId: ID!) {
+  playerTournamentStatus(playerId: $playerId) {
+    ...playerTournamentStatusFragment
+  }
+}
+
+fragment playerTournamentStatusFragment on PlayerTournamentStatus {
+  playerId
+  tournamentId
+  tournamentName
+  roundStatusDisplay
+  roundDisplay
+  roundStatus
+  roundStatusColor
+  position
+  thru
+  teeTime
+  score
+  total
+  displayMode
+}

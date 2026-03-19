@@ -700,6 +700,257 @@ def pga_schedule(
 
 
 # ---------------------------------------------------------------------------
+# Player Profiles
+# ---------------------------------------------------------------------------
+
+
+def pga_player_profile(player_id: str) -> dict:
+    """Get player profile overview.
+
+    Returns career highlights, wins, earnings, world ranking,
+    FedExCup standing, and bio basics.
+
+    Args:
+        player_id: Player ID (e.g., "52955" for Ludvig Aberg).
+
+    Returns:
+        Dict with player info, ``highlights`` DataFrame, and
+        ``overview`` DataFrame.
+    """
+    resp = rest_request(f"player/profiles/{player_id}")
+    summary = _safe_get(resp, "summaryData", "summaryData") or {}
+
+    highlights = pd.DataFrame([
+        {
+            "title": h.get("title"),
+            "value": h.get("data"),
+            "subtitle": h.get("subTitle"),
+        }
+        for h in summary.get("careerHighlights", [])
+    ])
+
+    overview_rows = []
+    for section in resp.get("overview", []):
+        if section.get("type") == "OVERVIEW_STATS":
+            for item in section.get("items", []):
+                for el in item.get("elements", []):
+                    overview_rows.append({
+                        "section": item.get("title"),
+                        "subtitle": item.get("subtitle"),
+                        "title": el.get("title"),
+                        "value": el.get("data"),
+                    })
+    overview = pd.DataFrame(overview_rows) if overview_rows else pd.DataFrame()
+
+    return {
+        "player_id": resp.get("playerId"),
+        "first_name": summary.get("firstName"),
+        "last_name": summary.get("lastName"),
+        "country": summary.get("country"),
+        "country_code": summary.get("countryCode"),
+        "born": summary.get("born"),
+        "age": summary.get("age"),
+        "birthplace": summary.get("birthplace"),
+        "college": summary.get("college"),
+        "turned_pro": summary.get("turnedPro"),
+        "highlights": highlights,
+        "overview": overview,
+    }
+
+
+def pga_player_career(player_id: str) -> pd.DataFrame:
+    """Get player career data.
+
+    Returns career achievements including starts, cuts, wins,
+    finish distribution, and earnings.
+
+    Args:
+        player_id: Player ID.
+
+    Returns:
+        DataFrame of career statistics.
+    """
+    resp = rest_request(f"player/profiles/{player_id}/career")
+    career_list = resp.get("career", [])
+    if not career_list:
+        return pd.DataFrame()
+
+    rows = []
+    for tour_data in career_list:
+        tour_code = tour_data.get("tourCode")
+        tour_name = tour_data.get("tourName")
+        for section in tour_data.get("careerData", []):
+            section_title = section.get("title")
+            for widget in section.get("stats", []):
+                widget_title = widget.get("title")
+                for item in widget.get("data", []):
+                    rows.append({
+                        "tour_code": tour_code,
+                        "tour_name": tour_name,
+                        "section": section_title,
+                        "widget": widget_title,
+                        "label": item.get("label"),
+                        "value": item.get("data"),
+                    })
+
+    return pd.DataFrame(rows) if rows else pd.DataFrame()
+
+
+def pga_player_results(player_id: str) -> pd.DataFrame:
+    """Get player tournament results.
+
+    Returns tournament-by-tournament results for the current season
+    including round scores, finish position, FedExCup points, and earnings.
+
+    Args:
+        player_id: Player ID.
+
+    Returns:
+        DataFrame with one row per tournament.
+    """
+    resp = rest_request(f"player/profiles/{player_id}/results")
+    results_list = resp.get("resultsData", [])
+    if not results_list:
+        return pd.DataFrame()
+
+    results = results_list[0]
+    headers = results.get("headers", [])
+    data_rows = results.get("data", [])
+    if not data_rows:
+        return pd.DataFrame()
+
+    # Build header labels
+    header_labels = []
+    for h in headers:
+        if "label" in h:
+            header_labels.append(h["label"])
+        elif "labels" in h:
+            prefix = h.get("groupLabel", "")
+            for sub in h["labels"]:
+                header_labels.append(f"{prefix} {sub}".strip())
+
+    rows = []
+    for d in data_rows:
+        fields = d.get("fields", [])
+        row = {"tournament_id": d.get("tournamentId")}
+        for i, val in enumerate(fields):
+            col = header_labels[i] if i < len(header_labels) else f"field_{i}"
+            # Convert to snake_case
+            col = col.lower().replace(" ", "_").replace("-", "_")
+            row[col] = val
+        rows.append(row)
+
+    return pd.DataFrame(rows)
+
+
+def pga_player_stats(player_id: str) -> pd.DataFrame:
+    """Get player stats profile.
+
+    Returns a player's full statistical profile with ranks and values
+    for 130+ stats in a single call.
+
+    Args:
+        player_id: Player ID.
+
+    Returns:
+        DataFrame with one row per stat.
+    """
+    resp = rest_request(f"player/profiles/{player_id}/stats")
+    stats = resp.get("stats", [])
+    if not stats:
+        return pd.DataFrame()
+
+    rows = []
+    for s in stats:
+        cats = s.get("category", [])
+        rows.append({
+            "stat_id": s.get("statId"),
+            "title": s.get("title"),
+            "rank": s.get("rank"),
+            "value": s.get("value"),
+            "category": ", ".join(cats) if cats else None,
+            "above_or_below": s.get("aboveOrBelow"),
+            "field_average": s.get("fieldAverage"),
+            "supporting_stat_desc": _safe_get(s, "supportingStat", "description"),
+            "supporting_stat_value": _safe_get(s, "supportingStat", "value"),
+            "supporting_value_desc": _safe_get(s, "supportingValue", "description"),
+            "supporting_value_value": _safe_get(s, "supportingValue", "value"),
+        })
+
+    return pd.DataFrame(rows)
+
+
+def pga_player_bio(player_id: str) -> dict:
+    """Get player bio.
+
+    Returns biographical text, amateur highlights, and widget data.
+
+    Args:
+        player_id: Player ID.
+
+    Returns:
+        Dict with ``text`` (list of paragraphs), ``amateur_highlights``
+        (list of strings), and ``widgets`` DataFrame.
+    """
+    resp = rest_request(f"player/profiles/{player_id}/bio")
+    bio = resp.get("bio", {})
+    widgets = resp.get("widgets", [])
+
+    bio_text = [e for e in bio.get("elements", []) if isinstance(e, str)]
+    amateur = [e for e in bio.get("amateurHighlights", []) if isinstance(e, str)]
+
+    widget_rows = []
+    for w in widgets:
+        for item in w.get("items", []):
+            widget_rows.append({
+                "widget_type": w.get("type"),
+                "widget_title": w.get("title"),
+                "label": item.get("label"),
+                "value": item.get("value"),
+            })
+
+    return {
+        "text": bio_text,
+        "amateur_highlights": amateur,
+        "widgets": pd.DataFrame(widget_rows) if widget_rows else pd.DataFrame(),
+    }
+
+
+def pga_player_tournament_status(player_id: str) -> pd.DataFrame:
+    """Get player tournament status.
+
+    Returns the player's status in the current tournament (if playing).
+
+    Args:
+        player_id: Player ID.
+
+    Returns:
+        DataFrame with one row, or empty if not in current tournament.
+    """
+    data = graphql_request(
+        "getPlayerTournamentStatus",
+        {"playerId": player_id},
+    )
+    status = data.get("playerTournamentStatus")
+    if not status:
+        return pd.DataFrame()
+
+    return pd.DataFrame([{
+        "player_id": status.get("playerId"),
+        "tournament_id": status.get("tournamentId"),
+        "tournament_name": status.get("tournamentName"),
+        "position": status.get("position"),
+        "thru": status.get("thru"),
+        "score": status.get("score"),
+        "total": status.get("total"),
+        "round_display": status.get("roundDisplay"),
+        "round_status": status.get("roundStatus"),
+        "tee_time": status.get("teeTime"),
+        "display_mode": status.get("displayMode"),
+    }])
+
+
+# ---------------------------------------------------------------------------
 # Content
 # ---------------------------------------------------------------------------
 

@@ -62,6 +62,17 @@ pga.pga_schedule(2025)
 | `pga_tournaments()` | Tournament metadata including location, courses, weather |
 | `pga_schedule()` | Season schedule with dates, purse, course, champion |
 
+### Player Profiles
+
+| Function | Description |
+|---|---|
+| `pga_player_profile()` | Overview with career highlights, wins, earnings, world rank, bio |
+| `pga_player_career()` | Career achievements: starts, cuts, wins, finish distribution |
+| `pga_player_results()` | Tournament-by-tournament results with round scores and earnings |
+| `pga_player_stats()` | Full stat profile (131 stats with ranks) in a single call |
+| `pga_player_bio()` | Biographical text and amateur highlights |
+| `pga_player_tournament_status()` | Live tournament status if currently playing |
+
 ### Content
 
 | Function | Description |

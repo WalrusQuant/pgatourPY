@@ -97,6 +97,45 @@ pga.pga_tourcast_videos("R2026475", "39971", round=1)
 
 ## Statistics
 
+## Player Profiles
+
+### Profile Overview
+
+```python
+profile = pga.pga_player_profile("52955")  # Ludvig Aberg
+print(profile["first_name"])   # "Ludvig"
+print(profile["country"])      # "Sweden"
+print(profile["highlights"])   # DataFrame: wins, FedExCup, world rank
+print(profile["overview"])     # DataFrame: career/season/bio/stats
+```
+
+### Player Stats (131 in One Call)
+
+```python
+stats = pga.pga_player_stats("52955")
+print(stats[["stat_id", "title", "rank", "value", "category"]].head(10))
+```
+
+### Tournament Results
+
+```python
+results = pga.pga_player_results("52955")
+print(results[["tournament", "pos", "total", "to_par", "winnings"]])
+```
+
+### Career, Bio, and Tournament Status
+
+```python
+career = pga.pga_player_career("52955")
+bio = pga.pga_player_bio("52955")
+print(bio["text"][0][:200])  # First bio paragraph
+
+# Is a player in the current tournament?
+status = pga.pga_player_tournament_status("39971")
+```
+
+## Statistics
+
 ### Pulling Stats
 
 ```python

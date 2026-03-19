@@ -62,6 +62,17 @@ pga.pga_schedule(2025)
 | `pga_tournaments(ids)` | Tournament metadata including location, courses, weather, and format |
 | `pga_schedule(year, tour)` | Full season schedule with dates, purse, course, champion, and FedExCup points |
 
+### Player Profiles
+
+| Function | Description |
+|---|---|
+| `pga_player_profile(player_id)` | Overview with career highlights, wins, earnings, world rank, bio basics |
+| `pga_player_career(player_id)` | Career achievements: starts, cuts, wins, finish distribution, earnings |
+| `pga_player_results(player_id)` | Tournament-by-tournament results with round scores, FedExCup points, earnings |
+| `pga_player_stats(player_id)` | Full stat profile (131 stats with ranks) in a single call |
+| `pga_player_bio(player_id)` | Biographical text, amateur highlights |
+| `pga_player_tournament_status(player_id)` | Live tournament status (position, score, thru) if currently playing |
+
 ### Content
 
 | Function | Description |
@@ -86,6 +97,31 @@ pga.pga_schedule(2025)
 | `"H"` | Korn Ferry Tour |
 
 ## Examples
+
+### Player Profiles
+
+```python
+import pgatourpy as pga
+
+# Full profile overview
+profile = pga.pga_player_profile("52955")  # Ludvig Aberg
+print(profile["first_name"])   # "Ludvig"
+print(profile["highlights"])   # DataFrame: wins, FedExCup rank, world rank
+print(profile["overview"])     # DataFrame: career/season/bio/stats summary
+
+# 131 stats in one call
+stats = pga.pga_player_stats("52955")
+print(stats[["stat_id", "title", "rank", "value"]].head(10))
+
+# Tournament results this season
+results = pga.pga_player_results("52955")
+print(results[["tournament", "pos", "total", "to_par", "winnings"]])
+
+# Career, bio, tournament status
+career = pga.pga_player_career("52955")
+bio = pga.pga_player_bio("52955")
+status = pga.pga_player_tournament_status("39971")  # if playing
+```
 
 ### Strokes Gained Analysis
 
