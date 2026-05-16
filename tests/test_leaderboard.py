@@ -31,5 +31,5 @@ def test_leaderboard_partial_row_does_not_crash(mock_graphql):
     mock_graphql(load_fixture("LeaderboardCompressedV3"))
     df = pga_leaderboard("R2026475")
     partial = df[df["player_id"] == "52955"].iloc[0]
-    assert partial["first_name"] is None
+    assert pd.isna(partial["first_name"])
     assert pd.isna(partial["total_sort"])
