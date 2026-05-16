@@ -1,6 +1,8 @@
 """pgatourPY — Python client for the PGA Tour API."""
 
+from pgatourpy._api import PgaTourError
 from pgatourpy.client import (
+    pga_content,
     pga_coverage,
     pga_current_leaders,
     pga_fedex_cup,
@@ -8,6 +10,7 @@ from pgatourpy.client import (
     pga_news,
     pga_news_franchises,
     pga_odds,
+    pga_odds_interactivity,
     pga_player_bio,
     pga_player_career,
     pga_player_profile,
@@ -19,6 +22,7 @@ from pgatourpy.client import (
     pga_scorecard,
     pga_scorecard_comparison,
     pga_shot_details,
+    pga_speed_rounds,
     pga_stats,
     pga_tee_times,
     pga_tourcast_videos,
@@ -30,6 +34,8 @@ from pgatourpy.stat_ids import STAT_IDS
 __version__ = "0.1.0"
 
 __all__ = [
+    "PgaTourError",
+    "pga_content",
     "pga_coverage",
     "pga_current_leaders",
     "pga_fedex_cup",
@@ -37,6 +43,7 @@ __all__ = [
     "pga_news",
     "pga_news_franchises",
     "pga_odds",
+    "pga_odds_interactivity",
     "pga_player_bio",
     "pga_player_career",
     "pga_player_profile",
@@ -48,6 +55,7 @@ __all__ = [
     "pga_scorecard",
     "pga_scorecard_comparison",
     "pga_shot_details",
+    "pga_speed_rounds",
     "pga_stats",
     "pga_tee_times",
     "pga_tourcast_videos",

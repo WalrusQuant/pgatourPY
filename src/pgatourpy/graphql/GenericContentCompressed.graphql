@@ -1,0 +1,5 @@
+query GenericContentCompressed($path: String!) {
+  genericContentCompressed(path: $path) {
+    payload
+  }
+}
