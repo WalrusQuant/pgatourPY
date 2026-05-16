@@ -1,0 +1,1298 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Python client for the PGA Tour API">
+      
+      
+      
+        <link rel="canonical" href="https://walrusquant.github.io/pgatourPY/getting-started/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../reference/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Getting Started - pgatourPY</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="light-green">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#getting-started" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="pgatourPY" class="md-header__button md-logo" aria-label="pgatourPY" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            pgatourPY
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Getting Started
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="light-green"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="green" data-md-color-accent="light-green"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/WalrusQuant/pgatourPY" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    WalrusQuant/pgatourPY
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="pgatourPY" class="md-nav__button md-logo" aria-label="pgatourPY" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    pgatourPY
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/WalrusQuant/pgatourPY" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    WalrusQuant/pgatourPY
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Installation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tournament-ids" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tournament IDs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tracking-a-live-tournament" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tracking a Live Tournament
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tracking a Live Tournament">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#leaderboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Leaderboard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tee-times" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tee Times
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tournament-metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tournament Metadata
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#broadcast-schedule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Broadcast Schedule
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#odds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Odds
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#player-deep-dive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Player Deep Dive
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Player Deep Dive">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scorecard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scorecard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shot-level-tracking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shot-Level Tracking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#videos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Videos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#statistics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Statistics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#player-profiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Player Profiles
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Player Profiles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#profile-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Profile Overview
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#player-stats-131-in-one-call" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Player Stats (131 in One Call)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tournament-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tournament Results
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#career-bio-and-tournament-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Career, Bio, and Tournament Status
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#statistics_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Statistics
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Statistics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pulling-stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pulling Stats
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#finding-stat-ids" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Finding Stat IDs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-stat-ids" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Stat IDs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#historical-comparisons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Historical Comparisons
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fedexcup-standings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FedExCup Standings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#player-directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Player Directory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#news" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        News
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Installation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tournament-ids" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tournament IDs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tracking-a-live-tournament" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tracking a Live Tournament
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tracking a Live Tournament">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#leaderboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Leaderboard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tee-times" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tee Times
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tournament-metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tournament Metadata
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#broadcast-schedule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Broadcast Schedule
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#odds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Odds
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#player-deep-dive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Player Deep Dive
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Player Deep Dive">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scorecard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Scorecard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shot-level-tracking" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shot-Level Tracking
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#videos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Videos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#statistics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Statistics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#player-profiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Player Profiles
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Player Profiles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#profile-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Profile Overview
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#player-stats-131-in-one-call" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Player Stats (131 in One Call)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tournament-results" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tournament Results
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#career-bio-and-tournament-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Career, Bio, and Tournament Status
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#statistics_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Statistics
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Statistics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pulling-stats" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pulling Stats
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#finding-stat-ids" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Finding Stat IDs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#common-stat-ids" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Stat IDs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#historical-comparisons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Historical Comparisons
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fedexcup-standings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FedExCup Standings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#player-directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Player Directory
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#news" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        News
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="getting-started">Getting Started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h1>
+<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/WalrusQuant/pgatourPY.git
+</code></pre></div>
+<h2 id="tournament-ids">Tournament IDs<a class="headerlink" href="#tournament-ids" title="Permanent link">&para;</a></h2>
+<p>Most functions need a tournament ID in the format <code>{tour_code}{year}{number}</code>:</p>
+<ul>
+<li><code>"R2026475"</code> — 2026 Valspar Championship (PGA Tour)</li>
+<li><code>"R2026003"</code> — 2026 WM Phoenix Open (PGA Tour)</li>
+</ul>
+<p>Use <code>pga_schedule()</code> to discover tournament IDs:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pgatourpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pga</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">schedule</span> <span class="o">=</span> <span class="n">pga</span><span class="o">.</span><span class="n">pga_schedule</span><span class="p">(</span><span class="mi">2026</span><span class="p">)</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nb">print</span><span class="p">(</span><span class="n">schedule</span><span class="p">[[</span><span class="s2">&quot;tournament_id&quot;</span><span class="p">,</span> <span class="s2">&quot;tournament_name&quot;</span><span class="p">,</span> <span class="s2">&quot;display_date&quot;</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">]])</span>
+</code></pre></div>
+<h2 id="tracking-a-live-tournament">Tracking a Live Tournament<a class="headerlink" href="#tracking-a-live-tournament" title="Permanent link">&para;</a></h2>
+<h3 id="leaderboard">Leaderboard<a class="headerlink" href="#leaderboard" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">lb</span> <span class="o">=</span> <span class="n">pga</span><span class="o">.</span><span class="n">pga_leaderboard</span><span class="p">(</span><span class="s2">&quot;R2026475&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">lb</span><span class="p">[[</span><span class="s2">&quot;position&quot;</span><span class="p">,</span> <span class="s2">&quot;display_name&quot;</span><span class="p">,</span> <span class="s2">&quot;total&quot;</span><span class="p">,</span> <span class="s2">&quot;thru&quot;</span><span class="p">]])</span>
+</code></pre></div>
+<p>For a quick top-15 snapshot:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">pga</span><span class="o">.</span><span class="n">pga_current_leaders</span><span class="p">(</span><span class="s2">&quot;R2026475&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="tee-times">Tee Times<a class="headerlink" href="#tee-times" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">tt</span> <span class="o">=</span> <span class="n">pga</span><span class="o">.</span><span class="n">pga_tee_times</span><span class="p">(</span><span class="s2">&quot;R2026475&quot;</span><span class="p">)</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">tt</span><span class="p">[[</span><span class="s2">&quot;round_number&quot;</span><span class="p">,</span> <span class="s2">&quot;tee_time&quot;</span><span class="p">,</span> <span class="s2">&quot;start_tee&quot;</span><span class="p">,</span> <span class="s2">&quot;display_name&quot;</span><span class="p">]])</span>
+</code></pre></div>
+<h3 id="tournament-metadata">Tournament Metadata<a class="headerlink" href="#tournament-metadata" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">t</span> <span class="o">=</span> <span class="n">pga</span><span class="o">.</span><span class="n">pga_tournaments</span><span class="p">(</span><span class="s2">&quot;R2026475&quot;</span><span class="p">)</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="s2">&quot;tournament_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># &quot;Valspar Championship&quot;</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="s2">&quot;weather_condition&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># &quot;DAY_PARTLY_CLOUDY&quot;</span>
+</code></pre></div>
+<h3 id="broadcast-schedule">Broadcast Schedule<a class="headerlink" href="#broadcast-schedule" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">pga</span><span class="o">.</span><span class="n">pga_coverage</span><span class="p">(</span><span class="s2">&quot;R2026475&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="odds">Odds<a class="headerlink" href="#odds" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">pga</span><span class="o">.</span><span class="n">pga_odds</span><span class="p">(</span><span class="s2">&quot;R2026475&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="player-deep-dive">Player Deep Dive<a class="headerlink" href="#player-deep-dive" title="Permanent link">&para;</a></h2>
+<h3 id="scorecard">Scorecard<a class="headerlink" href="#scorecard" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">sc</span> <span class="o">=</span> <span class="n">pga</span><span class="o">.</span><span class="n">pga_scorecard</span><span class="p">(</span><span class="s2">&quot;R2026475&quot;</span><span class="p">,</span> <span class="s2">&quot;39971&quot;</span><span class="p">)</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">sc</span><span class="p">[[</span><span class="s2">&quot;round_number&quot;</span><span class="p">,</span> <span class="s2">&quot;hole_number&quot;</span><span class="p">,</span> <span class="s2">&quot;par&quot;</span><span class="p">,</span> <span class="s2">&quot;score&quot;</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="s2">&quot;round_score&quot;</span><span class="p">]])</span>
+</code></pre></div>
+<h3 id="shot-level-tracking">Shot-Level Tracking<a class="headerlink" href="#shot-level-tracking" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">shots</span> <span class="o">=</span> <span class="n">pga</span><span class="o">.</span><span class="n">pga_shot_details</span><span class="p">(</span><span class="s2">&quot;R2026475&quot;</span><span class="p">,</span> <span class="s2">&quot;39971&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">shots</span><span class="p">[[</span><span class="s2">&quot;hole_number&quot;</span><span class="p">,</span> <span class="s2">&quot;stroke_number&quot;</span><span class="p">,</span> <span class="s2">&quot;play_by_play&quot;</span><span class="p">,</span> <span class="s2">&quot;distance&quot;</span><span class="p">]])</span>
+</code></pre></div>
+<p>Coordinate columns are included for shot visualization (x, y, tourcastX, tourcastY, tourcastZ).</p>
+<h3 id="videos">Videos<a class="headerlink" href="#videos" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Highlight clips</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">pga</span><span class="o">.</span><span class="n">pga_videos</span><span class="p">(</span><span class="n">player_ids</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;39971&quot;</span><span class="p">],</span> <span class="n">tournament_id</span><span class="o">=</span><span class="s2">&quot;475&quot;</span><span class="p">)</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># Shot-by-shot video</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="n">pga</span><span class="o">.</span><span class="n">pga_tourcast_videos</span><span class="p">(</span><span class="s2">&quot;R2026475&quot;</span><span class="p">,</span> <span class="s2">&quot;39971&quot;</span><span class="p">,</span> <span class="nb">round</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>pga_videos()</code> uses the numeric tournament ID (<code>"475"</code>) without the tour code prefix.</p>
+</div>
+<h2 id="statistics">Statistics<a class="headerlink" href="#statistics" title="Permanent link">&para;</a></h2>
+<h2 id="player-profiles">Player Profiles<a class="headerlink" href="#player-profiles" title="Permanent link">&para;</a></h2>
+<h3 id="profile-overview">Profile Overview<a class="headerlink" href="#profile-overview" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">profile</span> <span class="o">=</span> <span class="n">pga</span><span class="o">.</span><span class="n">pga_player_profile</span><span class="p">(</span><span class="s2">&quot;52955&quot;</span><span class="p">)</span>  <span class="c1"># Ludvig Aberg</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">profile</span><span class="p">[</span><span class="s2">&quot;first_name&quot;</span><span class="p">])</span>   <span class="c1"># &quot;Ludvig&quot;</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="nb">print</span><span class="p">(</span><span class="n">profile</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">])</span>      <span class="c1"># &quot;Sweden&quot;</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="nb">print</span><span class="p">(</span><span class="n">profile</span><span class="p">[</span><span class="s2">&quot;highlights&quot;</span><span class="p">])</span>   <span class="c1"># DataFrame: wins, FedExCup, world rank</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">profile</span><span class="p">[</span><span class="s2">&quot;overview&quot;</span><span class="p">])</span>     <span class="c1"># DataFrame: career/season/bio/stats</span>
+</code></pre></div>
+<h3 id="player-stats-131-in-one-call">Player Stats (131 in One Call)<a class="headerlink" href="#player-stats-131-in-one-call" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">stats</span> <span class="o">=</span> <span class="n">pga</span><span class="o">.</span><span class="n">pga_player_stats</span><span class="p">(</span><span class="s2">&quot;52955&quot;</span><span class="p">)</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">stats</span><span class="p">[[</span><span class="s2">&quot;stat_id&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;rank&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="s2">&quot;category&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+</code></pre></div>
+<h3 id="tournament-results">Tournament Results<a class="headerlink" href="#tournament-results" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">results</span> <span class="o">=</span> <span class="n">pga</span><span class="o">.</span><span class="n">pga_player_results</span><span class="p">(</span><span class="s2">&quot;52955&quot;</span><span class="p">)</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="p">[[</span><span class="s2">&quot;tournament&quot;</span><span class="p">,</span> <span class="s2">&quot;pos&quot;</span><span class="p">,</span> <span class="s2">&quot;total&quot;</span><span class="p">,</span> <span class="s2">&quot;to_par&quot;</span><span class="p">,</span> <span class="s2">&quot;winnings&quot;</span><span class="p">]])</span>
+</code></pre></div>
+<h3 id="career-bio-and-tournament-status">Career, Bio, and Tournament Status<a class="headerlink" href="#career-bio-and-tournament-status" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="n">career</span> <span class="o">=</span> <span class="n">pga</span><span class="o">.</span><span class="n">pga_player_career</span><span class="p">(</span><span class="s2">&quot;52955&quot;</span><span class="p">)</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="n">bio</span> <span class="o">=</span> <span class="n">pga</span><span class="o">.</span><span class="n">pga_player_bio</span><span class="p">(</span><span class="s2">&quot;52955&quot;</span><span class="p">)</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="nb">print</span><span class="p">(</span><span class="n">bio</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][:</span><span class="mi">200</span><span class="p">])</span>  <span class="c1"># First bio paragraph</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="c1"># Is a player in the current tournament?</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="n">status</span> <span class="o">=</span> <span class="n">pga</span><span class="o">.</span><span class="n">pga_player_tournament_status</span><span class="p">(</span><span class="s2">&quot;39971&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="statistics_1">Statistics<a class="headerlink" href="#statistics_1" title="Permanent link">&para;</a></h2>
+<h3 id="pulling-stats">Pulling Stats<a class="headerlink" href="#pulling-stats" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">sg</span> <span class="o">=</span> <span class="n">pga</span><span class="o">.</span><span class="n">pga_stats</span><span class="p">(</span><span class="s2">&quot;02675&quot;</span><span class="p">)</span>  <span class="c1"># SG: Total</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">sg</span><span class="p">[[</span><span class="s2">&quot;rank&quot;</span><span class="p">,</span> <span class="s2">&quot;player_name&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="c1"># Metadata in attrs</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="nb">print</span><span class="p">(</span><span class="n">sg</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;stat_title&quot;</span><span class="p">])</span>  <span class="c1"># &quot;SG: Total&quot;</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="nb">print</span><span class="p">(</span><span class="n">sg</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;tour_avg&quot;</span><span class="p">])</span>    <span class="c1"># &quot;0.000&quot;</span>
+</code></pre></div>
+<h3 id="finding-stat-ids">Finding Stat IDs<a class="headerlink" href="#finding-stat-ids" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># Browse by category</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="n">putting</span> <span class="o">=</span> <span class="n">pga</span><span class="o">.</span><span class="n">STAT_IDS</span><span class="p">[</span><span class="n">pga</span><span class="o">.</span><span class="n">STAT_IDS</span><span class="p">[</span><span class="s2">&quot;category&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Putting&quot;</span><span class="p">]</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="c1"># Search by name</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="n">driving</span> <span class="o">=</span> <span class="n">pga</span><span class="o">.</span><span class="n">STAT_IDS</span><span class="p">[</span>
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>    <span class="n">pga</span><span class="o">.</span><span class="n">STAT_IDS</span><span class="p">[</span><span class="s2">&quot;stat_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;Driving&quot;</span><span class="p">,</span> <span class="n">case</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="p">]</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>
+<a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="c1"># All categories</span>
+<a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="nb">print</span><span class="p">(</span><span class="n">pga</span><span class="o">.</span><span class="n">STAT_IDS</span><span class="p">[</span><span class="s2">&quot;category&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+</code></pre></div>
+<h3 id="common-stat-ids">Common Stat IDs<a class="headerlink" href="#common-stat-ids" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Stat ID</th>
+<th>Stat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>02675</code></td>
+<td>SG: Total</td>
+</tr>
+<tr>
+<td><code>02674</code></td>
+<td>SG: Tee-to-Green</td>
+</tr>
+<tr>
+<td><code>02567</code></td>
+<td>SG: Off-the-Tee</td>
+</tr>
+<tr>
+<td><code>02568</code></td>
+<td>SG: Approach the Green</td>
+</tr>
+<tr>
+<td><code>02569</code></td>
+<td>SG: Around-the-Green</td>
+</tr>
+<tr>
+<td><code>02564</code></td>
+<td>SG: Putting</td>
+</tr>
+<tr>
+<td><code>101</code></td>
+<td>Driving Distance</td>
+</tr>
+<tr>
+<td><code>102</code></td>
+<td>Driving Accuracy Percentage</td>
+</tr>
+<tr>
+<td><code>103</code></td>
+<td>Greens in Regulation Percentage</td>
+</tr>
+<tr>
+<td><code>130</code></td>
+<td>Scrambling</td>
+</tr>
+<tr>
+<td><code>104</code></td>
+<td>Putting Average</td>
+</tr>
+<tr>
+<td><code>120</code></td>
+<td>Scoring Average (Adjusted)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="historical-comparisons">Historical Comparisons<a class="headerlink" href="#historical-comparisons" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="n">dd_2024</span> <span class="o">=</span> <span class="n">pga</span><span class="o">.</span><span class="n">pga_stats</span><span class="p">(</span><span class="s2">&quot;101&quot;</span><span class="p">,</span> <span class="n">year</span><span class="o">=</span><span class="mi">2024</span><span class="p">)</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="n">dd_2020</span> <span class="o">=</span> <span class="n">pga</span><span class="o">.</span><span class="n">pga_stats</span><span class="p">(</span><span class="s2">&quot;101&quot;</span><span class="p">,</span> <span class="n">year</span><span class="o">=</span><span class="mi">2020</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="fedexcup-standings">FedExCup Standings<a class="headerlink" href="#fedexcup-standings" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="n">fc</span> <span class="o">=</span> <span class="n">pga</span><span class="o">.</span><span class="n">pga_fedex_cup</span><span class="p">(</span><span class="mi">2026</span><span class="p">)</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">fc</span><span class="p">[[</span><span class="s2">&quot;display_name&quot;</span><span class="p">,</span> <span class="s2">&quot;this_week_rank&quot;</span><span class="p">,</span> <span class="s2">&quot;projected_points&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</code></pre></div>
+<h2 id="player-directory">Player Directory<a class="headerlink" href="#player-directory" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="n">players</span> <span class="o">=</span> <span class="n">pga</span><span class="o">.</span><span class="n">pga_players</span><span class="p">(</span><span class="s2">&quot;R&quot;</span><span class="p">)</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="n">active</span> <span class="o">=</span> <span class="n">players</span><span class="p">[</span><span class="n">players</span><span class="p">[</span><span class="s2">&quot;is_active&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">True</span><span class="p">]</span>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="c1"># Other tours</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="n">champions</span> <span class="o">=</span> <span class="n">pga</span><span class="o">.</span><span class="n">pga_players</span><span class="p">(</span><span class="s2">&quot;S&quot;</span><span class="p">)</span>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="n">korn_ferry</span> <span class="o">=</span> <span class="n">pga</span><span class="o">.</span><span class="n">pga_players</span><span class="p">(</span><span class="s2">&quot;H&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="news">News<a class="headerlink" href="#news" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="n">news</span> <span class="o">=</span> <span class="n">pga</span><span class="o">.</span><span class="n">pga_news</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="c1"># See categories</span>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="n">pga</span><span class="o">.</span><span class="n">pga_news_franchises</span><span class="p">()</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="c1"># Filter by category</span>
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="n">pga</span><span class="o">.</span><span class="n">pga_news</span><span class="p">(</span><span class="n">franchises</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;power-rankings&quot;</span><span class="p">],</span> <span class="n">limit</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.expand", "content.code.copy", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
