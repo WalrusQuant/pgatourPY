@@ -50,8 +50,8 @@ pga.pga_schedule(2025)
 
 | Function | Description |
 |---|---|
-| `pga_stats(stat_id, year, tour)` | Any of 300+ stats with full player rankings (data from 2004-2026) |
-| `pga_fedex_cup(year, tour)` | FedExCup standings with projected and official rankings |
+| `pga_stats(stat_id, year, tour, event_query=None)` | Any of 300+ stats with full player rankings (2004–2026). Accepts a list of `stat_id` and/or `year` and loops client-side. |
+| `pga_fedex_cup(year, tour, event_query=None)` | FedExCup standings with projected and official rankings |
 | `pga_scorecard_comparison(tournament_id, player_ids, category)` | Head-to-head stat comparison between players |
 
 ### Players & Tournaments
@@ -81,6 +81,9 @@ pga.pga_schedule(2025)
 | `pga_news_franchises(tour)` | Available news categories for filtering |
 | `pga_videos(player_ids, tournament_id)` | Player video highlights with filtering options |
 | `pga_tourcast_videos(tournament_id, player_id, round)` | Shot-by-shot video clips for a player's round |
+| `pga_content(path)` | Generic CMS content fragment (raw parsed JSON) |
+| `pga_odds_interactivity()` | Odds widget configuration (raw parsed JSON) |
+| `pga_speed_rounds(tour)` | Speed-rounds video index (raw parsed JSON) |
 
 ### Bundled Data
 
@@ -113,9 +116,10 @@ print(profile["overview"])     # DataFrame: career/season/bio/stats summary
 stats = pga.pga_player_stats("52955")
 print(stats[["stat_id", "title", "rank", "value"]].head(10))
 
-# Tournament results this season
+# Tournament results across every season the API returns
 results = pga.pga_player_results("52955")
-print(results[["tournament", "pos", "total", "to_par", "winnings"]])
+print(results.groupby("season").size())
+print(results.head())  # columns are snake_cased API headers, deduped
 
 # Career, bio, tournament status
 career = pga.pga_player_career("52955")
@@ -193,6 +197,26 @@ dd_2020 = pga.pga_stats("101", year=2020)
 dd_2015 = pga.pga_stats("101", year=2015)
 ```
 
+### Multi-stat / multi-year requests
+
+`pga_stats` accepts a list of stat IDs and/or years. Because the upstream
+GraphQL operation only takes one `(stat_id, year)` per call, the wrapper
+loops client-side and concatenates. Every row carries `stat_id` and
+`year` columns so chunks remain distinguishable.
+
+```python
+import pgatourpy as pga
+
+# One stat across five seasons
+hist = pga.pga_stats("02675", year=[2022, 2023, 2024, 2025, 2026])
+
+# Four SG categories for the current season
+sg = pga.pga_stats(["02675", "02567", "02568", "02564"])
+
+# Use Tour's "Last 5 events" filter
+last5 = pga.pga_stats("02675", event_query="LAST_5")
+```
+
 ## API Details
 
 This package wraps the PGA Tour's GraphQL and REST APIs:
@@ -204,6 +228,26 @@ This package wraps the PGA Tour's GraphQL and REST APIs:
 - **HTTP client:** [httpx](https://www.python-httpx.org/) (sync)
 
 Several endpoints return gzip+base64 compressed payloads. The package handles decompression transparently.
+
+## Configuration
+
+| Environment variable | Purpose |
+|---|---|
+| `PGA_API_KEY` | Override the embedded public API key. Useful if the PGA Tour rotates the frontend key. |
+| `PGATOUR_VERBOSE` | Truthy (`1`, `true`, `yes`, …) elevates request envelope logs to `INFO`. |
+
+For finer control, the package logs through the `pgatourpy` logger:
+
+```python
+import logging
+logging.getLogger("pgatourpy").setLevel(logging.DEBUG)
+```
+
+All transport, parse, and decompression failures raise `pgatourpy.PgaTourError`
+with a message that names the operation and failure step.
+
+Requests time out after 30 seconds and retry up to 3 times with exponential
+backoff on transient failures (408, 429, 5xx, network errors).
 
 ## Dependencies
 

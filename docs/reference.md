@@ -55,3 +55,13 @@
 ::: pgatourpy.pga_videos
 
 ::: pgatourpy.pga_tourcast_videos
+
+::: pgatourpy.pga_content
+
+::: pgatourpy.pga_odds_interactivity
+
+::: pgatourpy.pga_speed_rounds
+
+## Errors
+
+::: pgatourpy.PgaTourError
