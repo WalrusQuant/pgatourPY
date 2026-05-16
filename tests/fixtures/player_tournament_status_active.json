@@ -1,0 +1,17 @@
+{
+  "playerTournamentStatus": {
+    "playerId": "52955",
+    "tournamentId": "R2026475",
+    "tournamentName": "The Players Championship",
+    "roundStatusDisplay": "Round 4 - F",
+    "roundStatusColor": "green",
+    "roundDisplay": "R4",
+    "roundStatus": "F",
+    "position": "T1",
+    "thru": "F",
+    "teeTime": 1773928800000,
+    "score": "-3",
+    "total": "-12",
+    "displayMode": "LIVE"
+  }
+}

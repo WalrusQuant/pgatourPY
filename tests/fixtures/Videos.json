@@ -1,0 +1,23 @@
+{
+  "videos": [
+    {
+      "id": "v1",
+      "title": "Highlight",
+      "description": "Cool",
+      "duration": 90,
+      "category": "HIGHLIGHTS",
+      "categoryDisplayName": "Highlights",
+      "franchise": "PGA_TOUR",
+      "franchiseDisplayName": "PGA TOUR",
+      "holeNumber": 17,
+      "roundNumber": 4,
+      "shotNumber": 1,
+      "shareUrl": "/share/v1",
+      "thumbnail": "",
+      "pubdate": 1773928800000,
+      "tournamentId": "475",
+      "tourCode": "R",
+      "year": "2026"
+    }
+  ]
+}

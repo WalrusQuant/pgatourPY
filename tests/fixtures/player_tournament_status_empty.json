@@ -1,0 +1,17 @@
+{
+  "playerTournamentStatus": {
+    "playerId": null,
+    "tournamentId": null,
+    "tournamentName": null,
+    "roundStatusDisplay": null,
+    "roundStatusColor": null,
+    "roundDisplay": null,
+    "roundStatus": null,
+    "position": null,
+    "thru": null,
+    "teeTime": null,
+    "score": null,
+    "total": null,
+    "displayMode": null
+  }
+}

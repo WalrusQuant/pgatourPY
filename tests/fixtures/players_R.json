@@ -1,0 +1,20 @@
+{
+  "players": [
+    {
+      "id": "39971",
+      "tourCode": "R",
+      "isPrimary": true,
+      "isActive": true,
+      "firstName": "Jordan",
+      "lastName": "Spieth",
+      "displayName": "Jordan Spieth",
+      "shortName": "J. Spieth",
+      "country": "USA",
+      "countryFlag": "us",
+      "playerBio": {
+        "age": 32
+      },
+      "primaryTour": "R"
+    }
+  ]
+}

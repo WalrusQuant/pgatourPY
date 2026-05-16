@@ -1,0 +1,34 @@
+{
+  "tourCupSplit": {
+    "id": "02671",
+    "season": "2025-26",
+    "officialPlayers": [
+      {
+        "__typename": "TourCupCombinedPlayer",
+        "id": "39971",
+        "firstName": "Jordan",
+        "lastName": "Spieth",
+        "displayName": "Jordan Spieth",
+        "country": "USA",
+        "countryFlag": "us",
+        "thisWeekRank": 1,
+        "previousWeekRank": 2,
+        "rankingData": {
+          "projected": 1,
+          "official": 1,
+          "movement": "UP",
+          "movementAmount": 1
+        },
+        "pointData": {
+          "projected": 3500,
+          "official": 3500
+        }
+      },
+      {
+        "__typename": "TourCupCombinedInfo",
+        "text": "info row"
+      }
+    ],
+    "projectedPlayers": []
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "stats": [
+    {
+      "statId": "02675",
+      "title": "SG: Total",
+      "rank": "1",
+      "value": "2.50",
+      "category": [
+        "SG"
+      ],
+      "aboveOrBelow": "ABOVE",
+      "fieldAverage": "0.0",
+      "supportingStat": {
+        "description": "Rounds",
+        "value": "20"
+      },
+      "supportingValue": {
+        "description": "Total SG",
+        "value": "50.5"
+      }
+    },
+    {
+      "statId": "02568",
+      "title": "Driving Distance",
+      "rank": "10",
+      "value": "310.5",
+      "category": [
+        "DRIVING"
+      ],
+      "aboveOrBelow": "ABOVE",
+      "fieldAverage": "295.0",
+      "supportingStat": {
+        "description": "Drives",
+        "value": "100"
+      },
+      "supportingValue": null
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "tournaments": [
+    {
+      "tournamentId": "R2026475",
+      "name": "The Players Championship",
+      "year": 2026,
+      "month": 3,
+      "displayDate": "Mar 19 - 22",
+      "status": "InProgress",
+      "purse": 25000000,
+      "standings": {
+        "value": "750"
+      },
+      "champions": [
+        {
+          "displayName": "Jordan Spieth"
+        }
+      ],
+      "championEarnings": 4500000,
+      "courseData": {
+        "name": "TPC Sawgrass",
+        "city": "Ponte Vedra Beach",
+        "stateCode": "FL",
+        "country": "USA"
+      },
+      "tournamentSiteUrl": "https://www.pgatour.com/example"
+    }
+  ]
+}

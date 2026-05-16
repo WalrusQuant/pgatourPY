@@ -1,0 +1,32 @@
+{
+  "career": [
+    {
+      "tourCode": "R",
+      "tourName": "PGA TOUR",
+      "careerData": [
+        {
+          "title": "Career",
+          "stats": [
+            {
+              "title": "Performance",
+              "data": [
+                {
+                  "label": "Wins",
+                  "data": "3"
+                },
+                {
+                  "label": "Top 10s",
+                  "data": "15"
+                },
+                {
+                  "label": "Starts",
+                  "data": "75"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

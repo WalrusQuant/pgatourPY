@@ -1,0 +1,19 @@
+{
+  "tourcastVideos": [
+    {
+      "id": "tv1",
+      "title": "Shot 1",
+      "description": "",
+      "duration": 30,
+      "holeNumber": 1,
+      "roundNumber": 4,
+      "shotNumber": 1,
+      "shareUrl": "/share/tv1",
+      "thumbnail": "",
+      "startsAt": 1773928800000,
+      "endsAt": 1773928830000,
+      "tournamentId": "R2026475",
+      "tourCode": "R"
+    }
+  ]
+}

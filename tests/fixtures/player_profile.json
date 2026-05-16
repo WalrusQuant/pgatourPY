@@ -1,0 +1,49 @@
+{
+  "playerId": "52955",
+  "summaryData": {
+    "summaryData": {
+      "firstName": "Ludvig",
+      "lastName": "Aberg",
+      "country": "Sweden",
+      "countryCode": "SWE",
+      "born": "1999-11-09",
+      "age": 26,
+      "birthplace": "Eslov, Sweden",
+      "college": "Texas Tech",
+      "turnedPro": 2023,
+      "careerHighlights": [
+        {
+          "title": "PGA TOUR Wins",
+          "data": "3",
+          "subTitle": "career"
+        },
+        {
+          "title": "Top 10s",
+          "data": "15",
+          "subTitle": "career"
+        }
+      ]
+    }
+  },
+  "overview": [
+    {
+      "type": "OVERVIEW_STATS",
+      "items": [
+        {
+          "title": "Season Stats",
+          "subtitle": "2025-26",
+          "elements": [
+            {
+              "title": "Earnings",
+              "data": "$5,000,000"
+            },
+            {
+              "title": "Wins",
+              "data": "2"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

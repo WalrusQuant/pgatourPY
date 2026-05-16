@@ -1,0 +1,39 @@
+{
+  "tournaments": [
+    {
+      "id": "R2026475",
+      "tournamentName": "The Players Championship",
+      "tournamentStatus": "InProgress",
+      "displayDate": "Mar 19 - 22, 2026",
+      "seasonYear": "2026",
+      "country": "USA",
+      "state": "FL",
+      "city": "Ponte Vedra Beach",
+      "timezone": "America/New_York",
+      "formatType": "STROKE_PLAY",
+      "currentRound": 4,
+      "roundStatus": "F",
+      "roundDisplay": "R4",
+      "roundStatusDisplay": "Round 4",
+      "scoredLevel": "PGATOUR",
+      "tournamentSiteURL": "https://www.pgatour.com/example",
+      "beautyImage": "",
+      "headshotBaseUrl": "",
+      "weather": {
+        "tempF": 78,
+        "tempC": 25,
+        "condition": "Sunny",
+        "windSpeedMPH": "10",
+        "humidity": 60
+      },
+      "courses": [
+        {
+          "id": "c1",
+          "courseName": "TPC Sawgrass",
+          "courseCode": "TPC",
+          "hostCourse": true
+        }
+      ]
+    }
+  ]
+}

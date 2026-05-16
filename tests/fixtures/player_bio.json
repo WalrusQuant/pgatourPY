@@ -1,0 +1,28 @@
+{
+  "bio": {
+    "elements": [
+      "Para one of bio text.",
+      "Para two of bio text."
+    ],
+    "amateurHighlights": [
+      "NCAA champion",
+      "Walker Cup"
+    ]
+  },
+  "widgets": [
+    {
+      "type": "PERSONAL",
+      "title": "Personal",
+      "items": [
+        {
+          "label": "Born",
+          "value": "1999-11-09"
+        },
+        {
+          "label": "Height",
+          "value": "6'2\""
+        }
+      ]
+    }
+  ]
+}

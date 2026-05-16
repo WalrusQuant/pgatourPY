@@ -1,0 +1,26 @@
+{
+  "newsArticles": {
+    "articles": [
+      {
+        "id": "n1",
+        "headline": "Spieth wins again",
+        "teaserHeadline": "Spieth wins",
+        "teaserContent": "Lorem",
+        "url": "/news/1",
+        "shareURL": "/share/1",
+        "publishDate": 1773928800000,
+        "updateDate": 1773929000000,
+        "franchise": "PGA_TOUR",
+        "franchiseDisplayName": "PGA TOUR",
+        "articleImage": "",
+        "author": {
+          "firstName": "Jane",
+          "lastName": "Doe"
+        },
+        "isLive": false,
+        "aiGenerated": false,
+        "articleFormType": "ARTICLE"
+      }
+    ]
+  }
+}

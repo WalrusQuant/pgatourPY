@@ -1,0 +1,18 @@
+{
+  "coverage": {
+    "coverageType": [
+      {
+        "__typename": "BroadcastFullTelecast",
+        "id": "c1",
+        "streamTitle": "Featured Group",
+        "roundNumber": 1,
+        "startTime": 1773928800000,
+        "endTime": 1773939600000,
+        "liveStatus": "LIVE"
+      },
+      {
+        "__typename": "Other"
+      }
+    ]
+  }
+}

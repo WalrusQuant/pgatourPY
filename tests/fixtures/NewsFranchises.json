@@ -1,0 +1,12 @@
+{
+  "newsFranchises": [
+    {
+      "franchise": "PGA_TOUR",
+      "franchiseLabel": "PGA TOUR"
+    },
+    {
+      "franchise": "FEATURED",
+      "franchiseLabel": "Featured"
+    }
+  ]
+}

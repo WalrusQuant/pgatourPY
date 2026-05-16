@@ -31,6 +31,11 @@ dependencies = [
     "pandas>=1.5.0",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+]
+
 [project.urls]
 Homepage = "https://github.com/WalrusQuant/pgatourPY"
 Repository = "https://github.com/WalrusQuant/pgatourPY"
