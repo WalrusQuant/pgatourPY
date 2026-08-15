@@ -1,0 +1,42 @@
+{
+  "tournamentPastResults": {
+    "id": "R2026027",
+    "availableSeasons": [
+      {
+        "year": 2025,
+        "displaySeason": "2025"
+      }
+    ],
+    "players": [
+      {
+        "id": "52955",
+        "position": "T10",
+        "total": "268",
+        "parRelativeScore": "-12",
+        "additionalData": [
+          "750"
+        ],
+        "player": {
+          "id": "52955",
+          "firstName": "Ludvig",
+          "lastName": "Aberg",
+          "displayName": "Ludvig Aberg",
+          "shortName": "L. Aberg",
+          "amateur": false,
+          "country": "SWE",
+          "countryFlag": "se"
+        },
+        "rounds": [
+          {
+            "score": "66",
+            "parRelativeScore": "-4"
+          },
+          {
+            "score": "68",
+            "parRelativeScore": "-2"
+          }
+        ]
+      }
+    ]
+  }
+}

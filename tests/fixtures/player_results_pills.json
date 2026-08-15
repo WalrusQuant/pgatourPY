@@ -1,0 +1,43 @@
+{
+  "playerId": "52955",
+  "resultPills": [
+    {
+      "label": "Season",
+      "queryArg": "season",
+      "options": [
+        {
+          "value": "2026",
+          "label": "2026",
+          "selected": true
+        },
+        {
+          "value": "2025",
+          "label": "2025",
+          "selected": false
+        }
+      ]
+    }
+  ],
+  "resultsData": [
+    {
+      "title": "Results & Scorecards",
+      "headers": [
+        {
+          "label": "Tournament"
+        },
+        {
+          "label": "Position"
+        }
+      ],
+      "data": [
+        {
+          "tournamentId": "R2026027",
+          "fields": [
+            "FedEx St. Jude",
+            "4"
+          ]
+        }
+      ]
+    }
+  ]
+}

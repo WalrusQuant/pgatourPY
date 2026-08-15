@@ -2,7 +2,12 @@
 
 from __future__ import annotations
 
-from pgatourpy import pga_players, pga_schedule, pga_tournaments
+from pgatourpy import (
+    pga_current_tournament,
+    pga_players,
+    pga_schedule,
+    pga_tournaments,
+)
 from tests.conftest import load_fixture
 
 
@@ -38,3 +43,18 @@ def test_schedule(mock_rest):
     assert len(df) == 1
     assert df.iloc[0]["champion"] == "Jordan Spieth"
     assert df.iloc[0]["fedex_cup_points"] == "750"
+
+
+def test_current_tournament(mock_config):
+    mock_config(load_fixture("web_config"))
+    assert pga_current_tournament() == "R2026027"
+    assert pga_current_tournament("Y") == "Y2026018"
+
+
+def test_current_tournament_missing_tour(mock_config):
+    import pytest
+    from pgatourpy import PgaTourError
+
+    mock_config({"defaultTournaments": {}})
+    with pytest.raises(PgaTourError):
+        pga_current_tournament("R")

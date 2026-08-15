@@ -42,6 +42,27 @@ def test_player_results_iterates_all_seasons(mock_rest):
     assert set(df["season"].unique()) == {"2025-26", "2024-25"}
 
 
+def test_player_results_loops_season_pills(mock_rest):
+    """Live API shape: one block + resultPills. Loop every advertised year."""
+    mock_rest(by_path={
+        "player/profiles/52955/results": load_fixture("player_results_pills"),
+        "player/profiles/52955/results?season=2026": load_fixture("player_results_pills"),
+        "player/profiles/52955/results?season=2025": load_fixture("player_results_2025"),
+    })
+    df = pga_player_results("52955")
+    assert len(df) == 3
+    assert set(df["season"].unique()) == {2026, 2025}
+
+
+def test_player_results_season_filter(mock_rest):
+    mock_rest(by_path={
+        "player/profiles/52955/results?season=2025": load_fixture("player_results_2025"),
+    })
+    df = pga_player_results("52955", season=2025)
+    assert len(df) == 2
+    assert set(df["season"].unique()) == {2025}
+
+
 def test_player_results_dedupes_headers(mock_rest):
     """§3: duplicate 'Position' columns must dedupe to position, position_1."""
     mock_rest(load_fixture("player_results"))

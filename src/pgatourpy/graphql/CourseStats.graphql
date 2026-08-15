@@ -1,0 +1,51 @@
+query CourseStats($tournamentId: ID!) {
+  courseStats(tournamentId: $tournamentId) {
+    tournamentId
+    courses {
+      tournamentId
+      courseId
+      courseName
+      courseCode
+      par
+      yardage
+      hostCourse
+      roundHoleStats {
+        roundHeader
+        roundNum
+        live
+        holeStats {
+          ... on CourseHoleStats {
+            __typename
+            courseHoleNum
+            parValue
+            yards
+            scoringAverage
+            scoringAverageDiff
+            scoringDiffTendency
+            eagles
+            birdies
+            pars
+            bogeys
+            doubleBogey
+            rank
+            live
+          }
+          ... on SummaryRow {
+            __typename
+            rowType
+            par
+            yardage
+            scoringAverage
+            scoringAverageDiff
+            scoringDiffTendency
+            eagles
+            birdies
+            pars
+            bogeys
+            doubleBogey
+          }
+        }
+      }
+    }
+  }
+}

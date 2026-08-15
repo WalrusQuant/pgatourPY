@@ -8,10 +8,16 @@ from typing import Any, Iterable
 
 import pandas as pd
 
-from pgatourpy._api import decompress_payload, graphql_request, rest_request
+from pgatourpy._api import (
+    PgaTourError,
+    config_request,
+    decompress_payload,
+    graphql_request,
+    rest_request,
+)
 from pgatourpy._parse import make_unique_snake
 
-VALID_TOUR_CODES = {"R", "S", "H"}
+VALID_TOUR_CODES = {"R", "S", "H", "Y"}
 
 
 def _validate_tour(tour: str) -> None:
@@ -109,7 +115,10 @@ def pga_leaderboard(tournament_id: str) -> pd.DataFrame:
             "first_name": player.get("firstName"),
             "last_name": player.get("lastName"),
             "display_name": player.get("displayName"),
+            "short_name": player.get("shortName"),
             "country": player.get("country"),
+            "country_flag": player.get("countryFlag"),
+            "amateur": player.get("amateur"),
             "position": scoring.get("position"),
             "total": scoring.get("total"),
             "total_sort": _to_float(scoring.get("totalSort")),
@@ -118,6 +127,15 @@ def pga_leaderboard(tournament_id: str) -> pd.DataFrame:
             "score_sort": _to_float(scoring.get("scoreSort")),
             "current_round": scoring.get("currentRound"),
             "player_state": scoring.get("playerState"),
+            "tee_time": _epoch_ms_to_datetime(scoring.get("teeTime")),
+            "course_id": scoring.get("courseId"),
+            "group_number": scoring.get("groupNumber"),
+            "back_nine": scoring.get("backNine"),
+            "movement_direction": scoring.get("movementDirection"),
+            "movement_amount": scoring.get("movementAmount"),
+            "total_strokes": scoring.get("totalStrokes"),
+            "official": scoring.get("official"),
+            "projected": scoring.get("projected"),
         }
         for i, r in enumerate(rounds, 1):
             row[f"round_{i}"] = r
@@ -127,6 +145,9 @@ def pga_leaderboard(tournament_id: str) -> pd.DataFrame:
     if not df.empty:
         df["total_sort"] = pd.to_numeric(df["total_sort"], errors="coerce")
         df["score_sort"] = pd.to_numeric(df["score_sort"], errors="coerce")
+        df.attrs["format_type"] = parsed.get("formatType")
+        df.attrs["tournament_status"] = parsed.get("tournamentStatus")
+        df.attrs["bubble_pill"] = parsed.get("bubblePill")
     return df
 
 
@@ -388,14 +409,32 @@ def pga_odds(tournament_id: str) -> pd.DataFrame:
 
     parsed = decompress_payload(payload)
 
-    for key in ("players", "odds", "rows"):
-        if key in parsed:
-            return pd.json_normalize(parsed[key])
-
+    players: list = []
     if isinstance(parsed, list):
-        return pd.json_normalize(parsed)
+        players = parsed
+    elif isinstance(parsed, dict):
+        for key in ("players", "odds", "rows"):
+            if isinstance(parsed.get(key), list):
+                players = parsed[key]
+                break
 
-    return pd.DataFrame()
+    if not players:
+        return pd.DataFrame()
+
+    rows = []
+    for p in players:
+        if not isinstance(p, dict):
+            continue
+        rows.append({
+            "player_id": p.get("playerId") or p.get("id"),
+            "display_name": p.get("displayName"),
+            "odds": p.get("odds"),
+            "odds_sort": p.get("oddsSort"),
+            "odds_direction": p.get("oddsDirection"),
+            "option_id": p.get("optionId"),
+            "url": p.get("url"),
+        })
+    return pd.DataFrame(rows)
 
 
 def pga_coverage(tournament_id: str) -> pd.DataFrame:
@@ -814,6 +853,31 @@ def pga_schedule(
     return pd.DataFrame(rows)
 
 
+def pga_current_tournament(tour: str = "R") -> str:
+    """Return this week's tournament ID for a tour.
+
+    Reads ``defaultTournaments`` from the PGA Tour web-config document
+    (the same source the frontend uses). Raises ``PgaTourError`` if
+    that tour has no default event.
+
+    Args:
+        tour: Tour code. Defaults to ``"R"``.
+
+    Returns:
+        Tournament ID (e.g. ``"R2026027"``).
+    """
+    _validate_tour(tour)
+    cfg = config_request("web-config")
+    entries = _safe_get(cfg or {}, "defaultTournaments", tour, default=[]) or []
+    if not entries:
+        raise PgaTourError(f"no default tournament for tour {tour!r}")
+    first = entries[0] if isinstance(entries[0], dict) else {}
+    tid = first.get("id") or first.get("leaderboardId")
+    if not tid:
+        raise PgaTourError(f"default tournament for tour {tour!r} has no id")
+    return str(tid)
+
+
 # ---------------------------------------------------------------------------
 # Player Profiles
 # ---------------------------------------------------------------------------
@@ -912,24 +976,35 @@ def pga_player_career(player_id: str) -> pd.DataFrame:
     return pd.DataFrame(rows) if rows else pd.DataFrame()
 
 
-def pga_player_results(player_id: str) -> pd.DataFrame:
-    """Get player tournament results.
+def _season_years_from_pills(resp: dict) -> list[int]:
+    """Extract available season years from a player-results ``resultPills`` list."""
+    for pill in resp.get("resultPills") or []:
+        if not isinstance(pill, dict) or pill.get("queryArg") != "season":
+            continue
+        years: list[int] = []
+        for opt in pill.get("options") or []:
+            if not isinstance(opt, dict):
+                continue
+            raw = opt.get("value")
+            if raw is None:
+                continue
+            try:
+                years.append(int(raw))
+            except (TypeError, ValueError):
+                continue
+        return years
+    return []
 
-    Iterates every season returned by the API (the upstream response
-    is a list keyed by season). Each row carries a ``season`` column.
-    Dynamic header labels are coerced to snake_case and deduplicated
-    so column names never collide.
 
-    Args:
-        player_id: Player ID.
-
-    Returns:
-        DataFrame with one row per tournament across all seasons.
-    """
-    resp = rest_request(f"player/profiles/{player_id}/results")
+def _frames_from_results_resp(
+    resp: dict,
+    *,
+    default_season: Any = None,
+) -> list[pd.DataFrame]:
+    """Parse one player-results REST payload into per-block DataFrames."""
     results_list = resp.get("resultsData") or []
     if not results_list:
-        return pd.DataFrame()
+        return []
 
     frames: list[pd.DataFrame] = []
     for idx, results in enumerate(results_list):
@@ -944,6 +1019,7 @@ def pga_player_results(player_id: str) -> pd.DataFrame:
             results.get("season")
             or results.get("year")
             or results.get("displaySeason")
+            or default_season
             or idx
         )
 
@@ -976,7 +1052,64 @@ def pga_player_results(player_id: str) -> pd.DataFrame:
 
         if rows:
             frames.append(pd.DataFrame(rows))
+    return frames
 
+
+def pga_player_results(
+    player_id: str,
+    season: int | list[int] | None = None,
+) -> pd.DataFrame:
+    """Get player tournament results.
+
+    The upstream REST endpoint returns one season per call. Pass
+    ``season`` to request specific years, or omit it to loop every
+    season listed in ``resultPills`` (the 0.2.0 "every season"
+    contract). Each row carries a ``season`` column. Dynamic header
+    labels are coerced to snake_case and deduplicated so column names
+    never collide.
+
+    Args:
+        player_id: Player ID.
+        season: Season year, list of years, or ``None`` for every
+            season the API advertises for this player.
+
+    Returns:
+        DataFrame with one row per tournament across the requested
+        seasons.
+    """
+    if season is not None:
+        years = _as_list(season)
+        if not years:
+            raise ValueError("season must be a non-empty int or list of ints")
+        for y in years:
+            if not isinstance(y, int):
+                raise ValueError(f"season entries must be int; got {y!r}")
+        frames: list[pd.DataFrame] = []
+        for y in years:
+            resp = rest_request(f"player/profiles/{player_id}/results?season={y}")
+            frames.extend(_frames_from_results_resp(resp, default_season=y))
+        if not frames:
+            return pd.DataFrame()
+        return pd.concat(frames, ignore_index=True, sort=False)
+
+    resp = rest_request(f"player/profiles/{player_id}/results")
+    results_list = resp.get("resultsData") or []
+    pill_years = _season_years_from_pills(resp)
+
+    # Legacy / fixture payloads already contain every season as
+    # separate resultsData blocks. Parse them in place.
+    if len(results_list) > 1 or not pill_years:
+        frames = _frames_from_results_resp(resp)
+        if not frames:
+            return pd.DataFrame()
+        return pd.concat(frames, ignore_index=True, sort=False)
+
+    frames = []
+    for y in pill_years:
+        season_resp = rest_request(
+            f"player/profiles/{player_id}/results?season={y}"
+        )
+        frames.extend(_frames_from_results_resp(season_resp, default_season=y))
     if not frames:
         return pd.DataFrame()
     return pd.concat(frames, ignore_index=True, sort=False)
@@ -1355,4 +1488,627 @@ def pga_tourcast_videos(
             "tour_code": v.get("tourCode"),
         })
 
+    return pd.DataFrame(rows)
+
+
+def _field_player_row(p: dict, *, alternate: bool | None = None) -> dict[str, Any]:
+    return {
+        "player_id": p.get("id"),
+        "first_name": p.get("firstName"),
+        "last_name": p.get("lastName"),
+        "display_name": p.get("displayName"),
+        "short_name": p.get("shortName"),
+        "country": p.get("country"),
+        "country_flag": p.get("countryFlag"),
+        "amateur": p.get("amateur"),
+        "owgr": p.get("owgr"),
+        "ranking_points": p.get("rankingPoints"),
+        "status": p.get("status"),
+        "qualifier": p.get("qualifier"),
+        "alternate": p.get("alternate") if alternate is None else alternate,
+        "withdrawn": p.get("withdrawn"),
+    }
+
+
+def pga_field(
+    tournament_id: str,
+    *,
+    include_withdrawn: bool = True,
+) -> pd.DataFrame:
+    """Get the tournament field.
+
+    Args:
+        tournament_id: Tournament ID (e.g., ``"R2026027"``).
+        include_withdrawn: Include withdrawn players.
+
+    Returns:
+        DataFrame with one row per player (field + alternates).
+    """
+    data = graphql_request(
+        "Field",
+        {
+            "fieldId": tournament_id,
+            "includeWithdrawn": include_withdrawn,
+        },
+    )
+    field = data.get("field") or {}
+    rows = [_field_player_row(p) for p in (field.get("players") or []) if isinstance(p, dict)]
+    rows.extend(
+        _field_player_row(p, alternate=True)
+        for p in (field.get("alternates") or [])
+        if isinstance(p, dict)
+    )
+    if not rows:
+        return pd.DataFrame()
+    df = pd.DataFrame(rows)
+    df.attrs["tournament_name"] = field.get("tournamentName")
+    df.attrs["last_updated"] = field.get("lastUpdated")
+    return df
+
+
+def pga_field_stats(
+    tournament_id: str,
+    field_stat_type: str = "CURRENT_FORM",
+) -> pd.DataFrame:
+    """Get field-level current-form or course-fit stats.
+
+    Args:
+        tournament_id: Tournament ID.
+        field_stat_type: ``"CURRENT_FORM"`` or ``"COURSE_FIT"``.
+
+    Returns:
+        DataFrame with one row per player. Shape varies by type.
+    """
+    data = graphql_request(
+        "FieldStats",
+        {"tournamentId": tournament_id, "fieldStatType": field_stat_type},
+    )
+    payload = data.get("fieldStats") or {}
+    players = payload.get("players") or []
+    if not players:
+        return pd.DataFrame()
+
+    headers = payload.get("statHeaders") or []
+    rows = []
+    for p in players:
+        if not isinstance(p, dict):
+            continue
+        row: dict[str, Any] = {
+            "player_id": p.get("playerId"),
+            "field_stat_type": payload.get("fieldStatType") or field_stat_type,
+            "total_rounds": p.get("totalRounds"),
+            "score": p.get("score"),
+        }
+        if p.get("__typename") == "FieldStatCurrentForm":
+            results = p.get("tournamentResults") or []
+            row["recent_events"] = len(results)
+            if results and isinstance(results[0], dict):
+                row["last_event"] = results[0].get("name")
+                row["last_position"] = results[0].get("position")
+            sg = p.get("strokesGained") or []
+            sg_headers = p.get("strokesGainedHeader") or []
+            for i, item in enumerate(sg):
+                if not isinstance(item, dict):
+                    continue
+                label = sg_headers[i] if i < len(sg_headers) else item.get("statId") or f"sg_{i}"
+                row[f"sg_{make_unique_snake([str(label)])[0]}"] = item.get("statValue")
+        else:
+            stats = p.get("stats") or []
+            snake_headers = make_unique_snake([str(h) for h in headers]) if headers else []
+            for i, item in enumerate(stats):
+                if not isinstance(item, dict):
+                    continue
+                col = snake_headers[i] if i < len(snake_headers) else f"stat_{i}"
+                row[col] = item.get("statValue")
+                row[f"{col}_rank"] = item.get("statRank")
+        rows.append(row)
+
+    if not rows:
+        return pd.DataFrame()
+    return pd.DataFrame(rows)
+
+
+def pga_leaderboard_holes(
+    tournament_id: str,
+    round: int | None = None,
+) -> pd.DataFrame:
+    """Get hole-by-hole scores for the whole field.
+
+    Args:
+        tournament_id: Tournament ID.
+        round: Round number. Defaults to the API's current round.
+
+    Returns:
+        DataFrame with one row per player per hole.
+    """
+    variables: dict[str, Any] = {"tournamentId": tournament_id}
+    if round is not None:
+        variables["round"] = int(round)
+
+    data = graphql_request("LeaderboardHoleByHole", variables)
+    board = data.get("leaderboardHoleByHole") or {}
+    players = board.get("playerData") or []
+    if not players:
+        return pd.DataFrame()
+
+    rows = []
+    for p in players:
+        if not isinstance(p, dict):
+            continue
+        player_id = p.get("playerId")
+        out = p.get("out")
+        inn = p.get("in")
+        total = p.get("total")
+        total_to_par = p.get("totalToPar")
+        course_id = p.get("courseId")
+        course_code = p.get("courseCode")
+        scores = p.get("scores") or []
+        if not scores:
+            rows.append({
+                "player_id": player_id,
+                "out": out,
+                "in": inn,
+                "total": total,
+                "total_to_par": total_to_par,
+                "course_id": course_id,
+                "course_code": course_code,
+            })
+            continue
+        for hole in scores:
+            if not isinstance(hole, dict):
+                continue
+            rows.append({
+                "player_id": player_id,
+                "hole_number": hole.get("holeNumber"),
+                "par": hole.get("par"),
+                "yardage": hole.get("yardage"),
+                "score": hole.get("score"),
+                "status": hole.get("status"),
+                "round_score": hole.get("roundScore"),
+                "sequence_number": hole.get("sequenceNumber"),
+                "out": out,
+                "in": inn,
+                "total": total,
+                "total_to_par": total_to_par,
+                "course_id": course_id,
+                "course_code": course_code,
+            })
+
+    if not rows:
+        return pd.DataFrame()
+    df = pd.DataFrame(rows)
+    df.attrs["tournament_id"] = board.get("tournamentId")
+    df.attrs["tournament_name"] = board.get("tournamentName")
+    df.attrs["current_round"] = board.get("currentRound")
+    return df
+
+
+def pga_tournament_past_results(
+    tournament_id: str,
+    year: int | None = None,
+) -> pd.DataFrame:
+    """Get historical finishes for a tournament.
+
+    Args:
+        tournament_id: Tournament ID (perm id, e.g. ``"R2026027"``).
+        year: Season year. Defaults to the most recent year the API
+            returns.
+
+    Returns:
+        DataFrame with one row per player.
+    """
+    variables: dict[str, Any] = {"tournamentPastResultsId": tournament_id}
+    if year is not None:
+        variables["year"] = int(year)
+
+    data = graphql_request("TournamentPastResults", variables)
+    payload = data.get("tournamentPastResults") or {}
+    players = payload.get("players") or []
+    if not players:
+        return pd.DataFrame()
+
+    rows = []
+    for p in players:
+        if not isinstance(p, dict):
+            continue
+        player = p.get("player") or {}
+        rounds = p.get("rounds") or []
+        row = {
+            "player_id": player.get("id") or p.get("id"),
+            "first_name": player.get("firstName"),
+            "last_name": player.get("lastName"),
+            "display_name": player.get("displayName"),
+            "short_name": player.get("shortName"),
+            "country": player.get("country"),
+            "country_flag": player.get("countryFlag"),
+            "amateur": player.get("amateur"),
+            "position": p.get("position"),
+            "total": p.get("total"),
+            "to_par": p.get("parRelativeScore"),
+        }
+        extra = p.get("additionalData") or []
+        for i, val in enumerate(extra):
+            row[f"additional_{i}"] = val
+        for i, rnd in enumerate(rounds, 1):
+            if isinstance(rnd, dict):
+                row[f"round_{i}"] = rnd.get("score")
+                row[f"round_{i}_to_par"] = rnd.get("parRelativeScore")
+            else:
+                row[f"round_{i}"] = rnd
+        rows.append(row)
+
+    if not rows:
+        return pd.DataFrame()
+    df = pd.DataFrame(rows)
+    df.attrs["available_seasons"] = payload.get("availableSeasons")
+    return df
+
+
+def pga_tournament_overview(tournament_id: str) -> dict:
+    """Get tournament overview tiles and champions.
+
+    Args:
+        tournament_id: Tournament ID.
+
+    Returns:
+        Dict with ``overview`` (DataFrame of tiles), ``defending_champion``
+        (dict or ``None``), ``past_champions`` (DataFrame), plus URL
+        scalars (``tickets_url``, ``tourcast_url``, ``share_url``,
+        ``event_guide_url``).
+    """
+    data = graphql_request("TournamentOverview", {"tournamentId": tournament_id})
+    ov = data.get("tournamentOverview") or {}
+
+    overview = pd.DataFrame([
+        {
+            "label": item.get("label"),
+            "value": item.get("value"),
+            "detail": item.get("detail"),
+            "secondary_detail": item.get("secondaryDetail"),
+        }
+        for item in (ov.get("overview") or [])
+        if isinstance(item, dict)
+    ])
+
+    def _champ(c: dict | None) -> dict | None:
+        if not isinstance(c, dict) or not c:
+            return None
+        return {
+            "player_id": c.get("playerId"),
+            "display_name": c.get("displayName"),
+            "year": c.get("year"),
+            "display_season": c.get("displaySeason"),
+            "score": c.get("score"),
+            "total": c.get("total"),
+            "title": c.get("title"),
+            "country_code": c.get("countryCode"),
+        }
+
+    past = [
+        _champ(c)
+        for c in (ov.get("pastChampions") or [])
+        if isinstance(c, dict)
+    ]
+    past_df = pd.DataFrame([c for c in past if c]) if past else pd.DataFrame()
+
+    return {
+        "overview": overview,
+        "defending_champion": _champ(ov.get("defendingChampion")),
+        "past_champions": past_df,
+        "tickets_url": ov.get("ticketsURL"),
+        "tourcast_url": ov.get("tourcastURL") or ov.get("tourcastURLWeb"),
+        "share_url": ov.get("shareURL"),
+        "event_guide_url": ov.get("eventGuideURL"),
+    }
+
+
+def _weather_temp(temp: Any) -> dict[str, Any]:
+    if not isinstance(temp, dict):
+        return {
+            "temp_f": None, "temp_c": None,
+            "min_temp_f": None, "min_temp_c": None,
+            "max_temp_f": None, "max_temp_c": None,
+        }
+    return {
+        "temp_f": temp.get("tempF"),
+        "temp_c": temp.get("tempC"),
+        "min_temp_f": temp.get("minTempF"),
+        "min_temp_c": temp.get("minTempC"),
+        "max_temp_f": temp.get("maxTempF"),
+        "max_temp_c": temp.get("maxTempC"),
+    }
+
+
+def pga_weather(tournament_id: str) -> pd.DataFrame:
+    """Get hourly and daily weather for a tournament.
+
+    Args:
+        tournament_id: Tournament ID.
+
+    Returns:
+        DataFrame with a ``horizon`` column (``hourly`` / ``daily``).
+    """
+    data = graphql_request("Weather", {"tournamentId": tournament_id})
+    weather = data.get("weather") or {}
+    rows = []
+    for horizon in ("hourly", "daily"):
+        for item in weather.get(horizon) or []:
+            if not isinstance(item, dict):
+                continue
+            row = {
+                "horizon": horizon,
+                "title": item.get("title"),
+                "condition": item.get("condition"),
+                "wind_direction": item.get("windDirection"),
+                "wind_speed_mph": item.get("windSpeedMPH"),
+                "wind_speed_kph": item.get("windSpeedKPH"),
+                "humidity": item.get("humidity"),
+                "precipitation": item.get("precipitation"),
+            }
+            row.update(_weather_temp(item.get("temperature")))
+            rows.append(row)
+    if not rows:
+        return pd.DataFrame()
+    df = pd.DataFrame(rows)
+    df.attrs["title"] = weather.get("title")
+    return df
+
+
+def pga_course_stats(tournament_id: str) -> pd.DataFrame:
+    """Get per-hole course stats for a tournament.
+
+    Args:
+        tournament_id: Tournament ID.
+
+    Returns:
+        DataFrame with one row per hole (or summary row) per round.
+    """
+    data = graphql_request("CourseStats", {"tournamentId": tournament_id})
+    payload = data.get("courseStats") or {}
+    rows = []
+    for course in payload.get("courses") or []:
+        if not isinstance(course, dict):
+            continue
+        for rnd in course.get("roundHoleStats") or []:
+            if not isinstance(rnd, dict):
+                continue
+            for hole in rnd.get("holeStats") or []:
+                if not isinstance(hole, dict):
+                    continue
+                rows.append({
+                    "course_id": course.get("courseId"),
+                    "course_name": course.get("courseName"),
+                    "course_code": course.get("courseCode"),
+                    "host_course": course.get("hostCourse"),
+                    "round_number": rnd.get("roundNum"),
+                    "round_header": rnd.get("roundHeader"),
+                    "live": rnd.get("live") or hole.get("live"),
+                    "row_type": hole.get("rowType") or hole.get("__typename"),
+                    "hole_number": hole.get("courseHoleNum"),
+                    "par": hole.get("parValue") or hole.get("par"),
+                    "yardage": hole.get("yards") or hole.get("yardage"),
+                    "scoring_average": hole.get("scoringAverage"),
+                    "scoring_average_diff": hole.get("scoringAverageDiff"),
+                    "eagles": hole.get("eagles"),
+                    "birdies": hole.get("birdies"),
+                    "pars": hole.get("pars"),
+                    "bogeys": hole.get("bogeys"),
+                    "double_bogey": hole.get("doubleBogey"),
+                    "rank": hole.get("rank"),
+                })
+    if not rows:
+        return pd.DataFrame()
+    return pd.DataFrame(rows)
+
+
+def pga_course_stats_overview(
+    tour: str = "R",
+    year: int | None = None,
+) -> pd.DataFrame:
+    """Get the season course-stats hub.
+
+    Args:
+        tour: Tour code. Defaults to ``"R"``.
+        year: Season year. Defaults to the current season.
+
+    Returns:
+        Long DataFrame of category items and their detail labels.
+    """
+    _validate_tour(tour)
+    variables: dict[str, Any] = {"tourCode": tour}
+    if year is not None:
+        variables["year"] = int(year)
+
+    data = graphql_request("CourseStatsOverview", variables)
+    payload = data.get("courseStatsOverview") or {}
+    rows = []
+    for cat in payload.get("categories") or []:
+        if not isinstance(cat, dict):
+            continue
+        for item in cat.get("items") or []:
+            if not isinstance(item, dict):
+                continue
+            details = item.get("details") or []
+            if not details:
+                rows.append({
+                    "category": cat.get("header"),
+                    "display_name": item.get("displayName"),
+                    "rank": item.get("rank"),
+                    "label": None,
+                    "value": None,
+                })
+                continue
+            for detail in details:
+                if not isinstance(detail, dict):
+                    continue
+                rows.append({
+                    "category": cat.get("header"),
+                    "display_name": item.get("displayName"),
+                    "rank": item.get("rank"),
+                    "label": detail.get("label"),
+                    "value": detail.get("value"),
+                })
+    if not rows:
+        return pd.DataFrame()
+    df = pd.DataFrame(rows)
+    df.attrs["tour"] = payload.get("tourCode")
+    df.attrs["year"] = payload.get("year")
+    return df
+
+
+def pga_signature_standings(tour: str = "R") -> pd.DataFrame:
+    """Get Signature Event standings.
+
+    Args:
+        tour: Tour code. Defaults to ``"R"``.
+
+    Returns:
+        DataFrame of official (and interim, if present) standings.
+    """
+    _validate_tour(tour)
+    data = graphql_request("SignatureStandings", {"tourCode": tour})
+    payload = data.get("signatureStandings") or {}
+    rows = []
+    for table_name in ("official", "interim"):
+        table = payload.get(table_name) or {}
+        for p in table.get("players") or []:
+            if not isinstance(p, dict) or p.get("__typename") != "SignaturePlayer":
+                continue
+            rows.append({
+                "table": table_name,
+                "player_id": p.get("playerId"),
+                "display_name": p.get("displayName"),
+                "short_name": p.get("shortName"),
+                "country": p.get("countryName"),
+                "country_flag": p.get("countryFlag"),
+                "started": p.get("started"),
+                "projected": p.get("projected"),
+                "projected_points": p.get("projectedPoints"),
+                "movement_amount": p.get("movementAmount"),
+                "movement_direction": p.get("movementDirection"),
+            })
+    if not rows:
+        return pd.DataFrame()
+    df = pd.DataFrame(rows)
+    df.attrs["info_title"] = payload.get("infoTitle")
+    df.attrs["tournament_id"] = payload.get("tournamentID")
+    return df
+
+
+def pga_priority_rankings(
+    tour: str = "R",
+    year: int | None = None,
+) -> pd.DataFrame:
+    """Get priority / exemption rankings.
+
+    Args:
+        tour: Tour code. Defaults to ``"R"``.
+        year: Season year. Defaults to the current season.
+
+    Returns:
+        DataFrame with one row per (category, player).
+    """
+    _validate_tour(tour)
+    variables: dict[str, Any] = {"tourCode": tour}
+    if year is not None:
+        variables["year"] = int(year)
+
+    data = graphql_request("PriorityRankings", variables)
+    payload = data.get("priorityRankings") or {}
+    rows = []
+    for cat in payload.get("categories") or []:
+        if not isinstance(cat, dict):
+            continue
+        category = cat.get("displayName")
+        detail = cat.get("detail")
+        for p in cat.get("players") or []:
+            if not isinstance(p, dict):
+                continue
+            rows.append({
+                "category": category,
+                "detail": detail,
+                "player_id": p.get("playerId"),
+                "display_name": p.get("displayName"),
+            })
+    if not rows:
+        return pd.DataFrame()
+    df = pd.DataFrame(rows)
+    df.attrs["year"] = payload.get("year")
+    df.attrs["display_year"] = payload.get("displayYear")
+    df.attrs["through"] = payload.get("throughText")
+    return df
+
+
+def pga_odds_markets(tournament_id: str) -> pd.DataFrame:
+    """Get the available betting-market catalog for a tournament.
+
+    Args:
+        tournament_id: Tournament ID.
+
+    Returns:
+        DataFrame of market types (To Win, matchups, finishes, …).
+    """
+    resp = rest_request(f"odds/tournament/{tournament_id}")
+    markets = resp.get("availableMarkets") or []
+    if not markets:
+        return pd.DataFrame()
+    rows = []
+    for m in markets:
+        if not isinstance(m, dict):
+            continue
+        rows.append({
+            "market_id": m.get("id"),
+            "name": m.get("name"),
+            "display_name": m.get("displayName"),
+            "market_type": m.get("marketType"),
+            "book": m.get("book"),
+        })
+    return pd.DataFrame(rows)
+
+
+def pga_player_odds(tournament_id: str, player_id: str) -> pd.DataFrame:
+    """Get FanDuel markets for one player in a tournament.
+
+    Args:
+        tournament_id: Tournament ID.
+        player_id: Player ID.
+
+    Returns:
+        DataFrame of market lines (finish, matchups, props, …).
+    """
+    resp = rest_request(f"odds/tournament/{tournament_id}/player/{player_id}")
+    markets = resp.get("playerMarkets") or []
+    if not markets:
+        return pd.DataFrame()
+
+    rows = []
+    for m in markets:
+        if not isinstance(m, dict):
+            continue
+        base = {
+            "sub_market_name": m.get("subMarketName"),
+            "market_display_name": m.get("marketDisplayName"),
+            "market_type": m.get("marketType"),
+            "layout_type": m.get("layoutType"),
+        }
+        groups = m.get("oddsDataGroup") or []
+        if not groups:
+            rows.append(base)
+            continue
+        for g in groups:
+            if not isinstance(g, dict):
+                continue
+            row = dict(base)
+            row["group_title"] = g.get("title")
+            # Flatten the first line of odds if present.
+            odds = g.get("odds") or g.get("selections") or g.get("data") or []
+            if isinstance(odds, list) and odds and isinstance(odds[0], dict):
+                first = odds[0]
+                row["odds"] = first.get("odds") or first.get("price") or first.get("displayOdds")
+                row["label"] = first.get("label") or first.get("name")
+            elif isinstance(g.get("odds"), (str, int, float)):
+                row["odds"] = g.get("odds")
+            rows.append(row)
+    if not rows:
+        return pd.DataFrame()
     return pd.DataFrame(rows)

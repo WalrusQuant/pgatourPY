@@ -1,0 +1,18 @@
+{
+  "availableMarkets": [
+    {
+      "id": 2574,
+      "name": "Outright Winner",
+      "book": "fanduel",
+      "displayName": "To Win",
+      "marketType": "ODDS_TO_WIN"
+    },
+    {
+      "id": 2578,
+      "name": "Matchup Props",
+      "book": "fanduel",
+      "displayName": "Matchups",
+      "marketType": "MATCHUP"
+    }
+  ]
+}

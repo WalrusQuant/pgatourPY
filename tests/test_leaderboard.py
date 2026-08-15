@@ -12,7 +12,12 @@ def test_leaderboard_basic(mock_graphql):
     mock_graphql(load_fixture("LeaderboardCompressedV3"))
     df = pga_leaderboard("R2026475")
     assert len(df) == 2  # full row + partial row
-    assert {"player_id", "total", "total_sort", "score_sort"} <= set(df.columns)
+    assert {
+        "player_id", "total", "total_sort", "score_sort",
+        "tee_time", "movement_direction", "amateur", "short_name",
+    } <= set(df.columns)
+    assert df.iloc[0]["short_name"] == "J. Spieth"
+    assert df.iloc[0]["movement_direction"] == "UP"
 
 
 def test_leaderboard_sort_keys_are_numeric(mock_graphql):

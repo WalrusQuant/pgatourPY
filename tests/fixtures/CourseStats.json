@@ -1,0 +1,37 @@
+{
+  "courseStats": {
+    "tournamentId": "R2026027",
+    "courses": [
+      {
+        "courseId": "513",
+        "courseName": "TPC Southwind",
+        "courseCode": "SW",
+        "hostCourse": true,
+        "roundHoleStats": [
+          {
+            "roundHeader": "R1",
+            "roundNum": 1,
+            "live": false,
+            "holeStats": [
+              {
+                "__typename": "CourseHoleStats",
+                "courseHoleNum": 1,
+                "parValue": 4,
+                "yards": 434,
+                "scoringAverage": "3.95",
+                "scoringAverageDiff": "-0.05",
+                "eagles": 0,
+                "birdies": 20,
+                "pars": 40,
+                "bogeys": 9,
+                "doubleBogey": 0,
+                "rank": 12,
+                "live": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

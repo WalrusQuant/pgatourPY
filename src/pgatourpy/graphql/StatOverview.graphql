@@ -1,0 +1,18 @@
+query StatOverview($tourCode: TourCode!, $year: Int) {
+  statOverview(tourCode: $tourCode, year: $year) {
+    tourCode
+    year
+    categories {
+      category
+      displayName
+      categoryType
+      subCategories {
+        displayName
+        stats {
+          statId
+          statTitle
+        }
+      }
+    }
+  }
+}

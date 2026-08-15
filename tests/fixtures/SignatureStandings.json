@@ -1,0 +1,31 @@
+{
+  "signatureStandings": {
+    "tournamentID": "R2026007",
+    "infoTitle": "Aon Next 10",
+    "official": {
+      "title": "Official",
+      "players": [
+        {
+          "__typename": "SignaturePlayer",
+          "playerId": "52955",
+          "displayName": "Ludvig Aberg",
+          "shortName": "L. Aberg",
+          "countryName": "Sweden",
+          "countryFlag": "se",
+          "started": true,
+          "projected": "8",
+          "projectedPoints": "1200",
+          "movementAmount": "1",
+          "movementDirection": "UP"
+        },
+        {
+          "__typename": "SignatureInfoLine",
+          "text": "cut line"
+        }
+      ]
+    },
+    "interim": {
+      "players": []
+    }
+  }
+}

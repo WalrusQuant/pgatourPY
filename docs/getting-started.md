@@ -10,14 +10,15 @@ pip install git+https://github.com/WalrusQuant/pgatourPY.git
 
 Most functions need a tournament ID in the format `{tour_code}{year}{number}`:
 
-- `"R2026475"` — 2026 Valspar Championship (PGA Tour)
-- `"R2026003"` — 2026 WM Phoenix Open (PGA Tour)
+- `"R2026027"` — 2026 FedEx St. Jude Championship (PGA Tour)
+- `"R2026011"` — 2026 THE PLAYERS Championship (PGA Tour)
 
-Use `pga_schedule()` to discover tournament IDs:
+Use `pga_current_tournament()` for this week's ID, or `pga_schedule()` to browse the season:
 
 ```python
 import pgatourpy as pga
 
+tid = pga.pga_current_tournament()
 schedule = pga.pga_schedule(2026)
 print(schedule[["tournament_id", "tournament_name", "display_date", "status"]])
 ```
@@ -27,41 +28,51 @@ print(schedule[["tournament_id", "tournament_name", "display_date", "status"]])
 ### Leaderboard
 
 ```python
-lb = pga.pga_leaderboard("R2026475")
+tid = pga.pga_current_tournament()
+lb = pga.pga_leaderboard(tid)
 print(lb[["position", "display_name", "total", "thru"]])
 ```
 
 For a quick top-15 snapshot:
 
 ```python
-pga.pga_current_leaders("R2026475")
+pga.pga_current_leaders(tid)
+```
+
+### Field
+
+```python
+pga.pga_field(tid)
 ```
 
 ### Tee Times
 
 ```python
-tt = pga.pga_tee_times("R2026475")
+tt = pga.pga_tee_times(tid)
 print(tt[["round_number", "tee_time", "start_tee", "display_name"]])
 ```
 
 ### Tournament Metadata
 
 ```python
-t = pga.pga_tournaments("R2026475")
-print(t["tournament_name"].iloc[0])  # "Valspar Championship"
-print(t["weather_condition"].iloc[0])  # "DAY_PARTLY_CLOUDY"
+t = pga.pga_tournaments(tid)
+print(t["tournament_name"].iloc[0])
+print(t["weather_condition"].iloc[0])
 ```
 
 ### Broadcast Schedule
 
 ```python
-pga.pga_coverage("R2026475")
+pga.pga_coverage(tid)
 ```
 
 ### Odds
 
 ```python
-pga.pga_odds("R2026475")
+pga.pga_odds(tid)
+pga.pga_odds_markets(tid)
+pga.pga_player_odds(tid, "34046")
+pga.pga_field_stats(tid)
 ```
 
 ## Player Deep Dive
@@ -69,14 +80,14 @@ pga.pga_odds("R2026475")
 ### Scorecard
 
 ```python
-sc = pga.pga_scorecard("R2026475", "39971")
+sc = pga.pga_scorecard(tid, "34046")
 print(sc[["round_number", "hole_number", "par", "score", "status", "round_score"]])
 ```
 
 ### Shot-Level Tracking
 
 ```python
-shots = pga.pga_shot_details("R2026475", "39971", round=1)
+shots = pga.pga_shot_details(tid, "34046", round=1)
 print(shots[["hole_number", "stroke_number", "play_by_play", "distance"]])
 ```
 
@@ -86,16 +97,34 @@ Coordinate columns are included for shot visualization (x, y, tourcastX, tourcas
 
 ```python
 # Highlight clips
-pga.pga_videos(player_ids=["39971"], tournament_id="475")
+pga.pga_videos(player_ids=["34046"], tournament_id="027")
 
 # Shot-by-shot video
-pga.pga_tourcast_videos("R2026475", "39971", round=1)
+pga.pga_tourcast_videos(tid, "34046", round=1)
 ```
 
 !!! note
-    `pga_videos()` uses the numeric tournament ID (`"475"`) without the tour code prefix.
+    `pga_videos()` uses the numeric tournament ID (`"027"`) without the tour code prefix.
 
-## Statistics
+### Hole-by-hole field scores
+
+```python
+holes = pga.pga_leaderboard_holes(tid)
+```
+
+### Weather and course stats
+
+```python
+pga.pga_weather(tid)
+pga.pga_course_stats(tid)
+```
+
+### Tournament overview and past results
+
+```python
+pga.pga_tournament_overview(tid)
+pga.pga_tournament_past_results(tid, year=2025)
+```
 
 ## Player Profiles
 
@@ -109,7 +138,7 @@ print(profile["highlights"])   # DataFrame: wins, FedExCup, world rank
 print(profile["overview"])     # DataFrame: career/season/bio/stats
 ```
 
-### Player Stats (131 in One Call)
+### Player Stats (130+ in One Call)
 
 ```python
 stats = pga.pga_player_stats("52955")
@@ -120,7 +149,11 @@ print(stats[["stat_id", "title", "rank", "value", "category"]].head(10))
 
 ```python
 results = pga.pga_player_results("52955")
+print(results.groupby("season").size())
 print(results[["tournament", "pos", "total", "to_par", "winnings"]])
+
+# One season only
+pga.pga_player_results("52955", season=2025)
 ```
 
 ### Career, Bio, and Tournament Status
@@ -131,7 +164,7 @@ bio = pga.pga_player_bio("52955")
 print(bio["text"][0][:200])  # First bio paragraph
 
 # Is a player in the current tournament?
-status = pga.pga_player_tournament_status("39971")
+status = pga.pga_player_tournament_status("34046")
 ```
 
 ## Statistics
@@ -186,11 +219,14 @@ dd_2024 = pga.pga_stats("101", year=2024)
 dd_2020 = pga.pga_stats("101", year=2020)
 ```
 
-## FedExCup Standings
+## FedExCup and other standings
 
 ```python
 fc = pga.pga_fedex_cup(2026)
 print(fc[["display_name", "this_week_rank", "projected_points"]].head())
+
+pga.pga_signature_standings()
+pga.pga_priority_rankings()
 ```
 
 ## Player Directory
@@ -202,6 +238,7 @@ active = players[players["is_active"] == True]
 # Other tours
 champions = pga.pga_players("S")
 korn_ferry = pga.pga_players("H")
+americas = pga.pga_players("Y")
 ```
 
 ## News

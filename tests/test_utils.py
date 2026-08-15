@@ -13,6 +13,7 @@ def test_validate_tour_accepts_valid():
     _validate_tour("R")
     _validate_tour("S")
     _validate_tour("H")
+    _validate_tour("Y")
 
 
 def test_validate_tour_rejects_invalid():
@@ -42,7 +43,7 @@ def test_epoch_ms_to_datetime():
 
 
 def test_stat_ids_loaded():
-    assert len(STAT_IDS) > 200
+    assert len(STAT_IDS) > 400
     assert list(STAT_IDS.columns) == [
         "stat_id", "stat_name", "category", "subcategory"
     ]

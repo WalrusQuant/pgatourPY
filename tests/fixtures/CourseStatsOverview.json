@@ -1,0 +1,27 @@
+{
+  "courseStatsOverview": {
+    "tourCode": "R",
+    "year": 2026,
+    "categories": [
+      {
+        "header": "Toughest Holes",
+        "items": [
+          {
+            "displayName": "TPC Southwind #14",
+            "rank": 1,
+            "details": [
+              {
+                "label": "Scoring Avg",
+                "value": "4.35"
+              },
+              {
+                "label": "Par",
+                "value": "4"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

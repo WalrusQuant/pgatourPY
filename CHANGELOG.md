@@ -5,6 +5,60 @@ All notable changes to pgatourPY are documented in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] — 2026-08-15
+
+Coverage pass after a live audit against the FedEx St. Jude Championship
+(`R2026027`). Every 0.2.0 wrapper still works; this release adds the
+endpoints the frontend already uses and fixes two silent parser bugs.
+
+### Breaking changes
+
+- **`pga_odds`**: columns are now snake_cased (`player_id`, `odds_sort`,
+  `odds_direction`, `option_id`) instead of the raw camelCase keys from
+  `json_normalize`.
+- **`pga_player_results`**: the `season` column is the requested year
+  (`2026`) when the live one-block + `resultPills` payload is used,
+  instead of the list index `0`. Legacy multi-block fixtures still
+  preserve their embedded season labels.
+
+### New features
+
+- **Tour code `Y`** (PGA Tour Americas) is accepted by every tour-scoped
+  function.
+- **`pga_current_tournament(tour)`** — this week's tournament ID from
+  `orchestrator-config.pgatour.com/web-config`.
+- **`pga_field` / `pga_field_stats`** — field list (OWGR, withdrawn,
+  alternates) and current-form / course-fit stats.
+- **`pga_leaderboard_holes`** — hole-by-hole scores for the whole field.
+- **`pga_tournament_past_results` / `pga_tournament_overview` /
+  `pga_weather` / `pga_course_stats` / `pga_course_stats_overview`**.
+- **`pga_signature_standings` / `pga_priority_rankings`**.
+- **`pga_odds_markets` / `pga_player_odds`** — market catalog and
+  per-player FanDuel lines.
+- **`pga_player_results(..., season=)`** — request one year, a list of
+  years, or omit to loop every season in `resultPills`.
+- **`STAT_IDS`** regenerated from live `StatOverview` (467 unique IDs).
+
+### Bug fixes
+
+- **`pga_player_results`** no longer silently returns only the current
+  season. The upstream REST endpoint is now one season per call;
+  historical years require `?season=YYYY`. The wrapper loops those
+  years when `season` is omitted.
+
+### Parser improvements
+
+- **`pga_leaderboard`** now surfaces `tee_time`, `course_id`,
+  `group_number`, `back_nine`, `movement_direction`, `movement_amount`,
+  `total_strokes`, `official`, `projected`, `amateur`, `country_flag`,
+  and `short_name`. Tournament-level `format_type`, `tournament_status`,
+  and `bubble_pill` are stashed on `df.attrs`.
+
+### Docs
+
+- Examples use `pga_current_tournament()` and current player IDs
+  (Spieth is `34046`, not `39971`). Player/event counts updated.
+
 ## [0.2.0] — 2026-05-16
 
 A correctness, robustness, and test-coverage pass ported from the sibling

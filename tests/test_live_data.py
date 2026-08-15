@@ -52,7 +52,9 @@ def test_odds(mock_graphql):
     mock_graphql(load_fixture("oddsToWinCompressed"))
     df = pga_odds("R2026475")
     assert len(df) == 2
-    assert "id" in df.columns
+    assert "player_id" in df.columns
+    assert df.iloc[0]["player_id"] == "34046"
+    assert "odds_sort" in df.columns
 
 
 def test_coverage(mock_graphql):

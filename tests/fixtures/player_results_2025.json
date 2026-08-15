@@ -1,0 +1,50 @@
+{
+  "playerId": "52955",
+  "resultPills": [
+    {
+      "label": "Season",
+      "queryArg": "season",
+      "options": [
+        {
+          "value": "2026",
+          "label": "2026",
+          "selected": false
+        },
+        {
+          "value": "2025",
+          "label": "2025",
+          "selected": true
+        }
+      ]
+    }
+  ],
+  "resultsData": [
+    {
+      "title": "Results & Scorecards",
+      "headers": [
+        {
+          "label": "Tournament"
+        },
+        {
+          "label": "Position"
+        }
+      ],
+      "data": [
+        {
+          "tournamentId": "R2025007",
+          "fields": [
+            "Genesis",
+            "1"
+          ]
+        },
+        {
+          "tournamentId": "R2025027",
+          "fields": [
+            "St. Jude",
+            "T10"
+          ]
+        }
+      ]
+    }
+  ]
+}

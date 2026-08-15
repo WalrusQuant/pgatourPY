@@ -1,0 +1,36 @@
+{
+  "leaderboardHoleByHole": {
+    "tournamentId": "R2026027",
+    "tournamentName": "FedEx St. Jude Championship",
+    "currentRound": 3,
+    "holeHeaders": [
+      {
+        "holeNumber": 1,
+        "hole": "1",
+        "par": 4
+      }
+    ],
+    "playerData": [
+      {
+        "playerId": "52955",
+        "out": "32",
+        "in": "34",
+        "total": "66",
+        "totalToPar": "-4",
+        "courseId": "513",
+        "courseCode": "SW",
+        "scores": [
+          {
+            "holeNumber": 1,
+            "par": 4,
+            "yardage": 434,
+            "sequenceNumber": 1,
+            "score": "3",
+            "status": "BIRDIE",
+            "roundScore": "-1"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+query PriorityRankings($tourCode: TourCode!, $year: Int) {
+  priorityRankings(tourCode: $tourCode, year: $year) {
+    tourCode
+    year
+    displayYear
+    throughText
+    yearPills {
+      year
+      displaySeason
+    }
+    categories {
+      displayName
+      detail
+      players {
+        playerId
+        displayName
+      }
+    }
+  }
+}

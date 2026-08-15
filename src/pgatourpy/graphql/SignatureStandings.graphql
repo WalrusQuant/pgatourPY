@@ -1,0 +1,43 @@
+query SignatureStandings($tourCode: TourCode!) {
+  signatureStandings(tourCode: $tourCode) {
+    tournamentID
+    infoTitle
+    official {
+      title
+      description
+      players {
+        ... on SignaturePlayer {
+          __typename
+          playerId
+          displayName
+          shortName
+          countryName
+          countryFlag
+          started
+          projected
+          projectedPoints
+          movementAmount
+          movementDirection
+        }
+      }
+    }
+    interim {
+      title
+      players {
+        ... on SignaturePlayer {
+          __typename
+          playerId
+          displayName
+          shortName
+          countryName
+          countryFlag
+          started
+          projected
+          projectedPoints
+          movementAmount
+          movementDirection
+        }
+      }
+    }
+  }
+}

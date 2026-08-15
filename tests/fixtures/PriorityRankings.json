@@ -1,0 +1,20 @@
+{
+  "priorityRankings": {
+    "tourCode": "R",
+    "year": 2026,
+    "displayYear": "2026",
+    "throughText": "Wyndham Championship",
+    "categories": [
+      {
+        "displayName": "Tournament Winners",
+        "detail": "Winners from the past two seasons",
+        "players": [
+          {
+            "playerId": "46046",
+            "displayName": "Scottie Scheffler"
+          }
+        ]
+      }
+    ]
+  }
+}

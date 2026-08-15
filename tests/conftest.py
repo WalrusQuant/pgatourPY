@@ -88,3 +88,14 @@ def mock_rest(monkeypatch):
                 lambda path: value,
             )
     return _setter
+
+
+@pytest.fixture
+def mock_config(monkeypatch):
+    """Returns a setter that patches config_request to return a fixture."""
+    def _setter(value=None):
+        monkeypatch.setattr(
+            "pgatourpy.client.config_request",
+            lambda path: value,
+        )
+    return _setter

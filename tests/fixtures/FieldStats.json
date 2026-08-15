@@ -1,0 +1,36 @@
+{
+  "fieldStats": {
+    "tournamentId": "R2026027",
+    "fieldStatType": "CURRENT_FORM",
+    "statHeaders": [],
+    "players": [
+      {
+        "__typename": "FieldStatCurrentForm",
+        "playerId": "52955",
+        "totalRounds": 12,
+        "tournamentResults": [
+          {
+            "name": "Wyndham",
+            "position": "T5",
+            "score": "-12",
+            "season": 2026
+          }
+        ],
+        "strokesGainedHeader": [
+          "Total",
+          "OTT"
+        ],
+        "strokesGained": [
+          {
+            "statId": "02675",
+            "statValue": "1.20"
+          },
+          {
+            "statId": "02567",
+            "statValue": "0.40"
+          }
+        ]
+      }
+    ]
+  }
+}

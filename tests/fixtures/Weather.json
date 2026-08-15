@@ -1,0 +1,39 @@
+{
+  "weather": {
+    "title": "Weather",
+    "hourly": [
+      {
+        "title": "2 PM",
+        "condition": "Sunny",
+        "windDirection": "SW",
+        "windSpeedMPH": "8",
+        "windSpeedKPH": "13",
+        "humidity": 40,
+        "precipitation": "0%",
+        "temperature": {
+          "__typename": "StandardWeatherTemp",
+          "tempF": 91,
+          "tempC": 33
+        }
+      }
+    ],
+    "daily": [
+      {
+        "title": "Sat",
+        "condition": "Partly Cloudy",
+        "windDirection": "S",
+        "windSpeedMPH": "10",
+        "windSpeedKPH": "16",
+        "humidity": 45,
+        "precipitation": "10%",
+        "temperature": {
+          "__typename": "RangeWeatherTemp",
+          "minTempF": 74,
+          "minTempC": 23,
+          "maxTempF": 93,
+          "maxTempC": 34
+        }
+      }
+    ]
+  }
+}

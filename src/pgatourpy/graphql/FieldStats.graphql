@@ -1,0 +1,41 @@
+query FieldStats($tournamentId: ID!, $fieldStatType: FieldStatType!) {
+  fieldStats(tournamentId: $tournamentId, fieldStatType: $fieldStatType) {
+    tournamentId
+    fieldStatType
+    statHeaders
+    players {
+      ... on FieldStatCurrentForm {
+        __typename
+        playerId
+        totalRounds
+        tournamentResults {
+          tournamentId
+          endDate
+          name
+          tourCode
+          position
+          score
+          columnIndex
+          season
+        }
+        strokesGained {
+          statId
+          statValue
+          statColor
+        }
+        strokesGainedHeader
+      }
+      ... on FieldStatCourseFit {
+        __typename
+        playerId
+        totalRounds
+        score
+        stats {
+          statValue
+          statRank
+          statColor
+        }
+      }
+    }
+  }
+}

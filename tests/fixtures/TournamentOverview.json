@@ -1,0 +1,36 @@
+{
+  "tournamentOverview": {
+    "ticketsURL": "https://example.com/tickets",
+    "tourcastURL": "https://example.com/tourcast",
+    "shareURL": "https://example.com/share",
+    "eventGuideURL": "https://example.com/guide",
+    "overview": [
+      {
+        "label": "Purse",
+        "value": "$20,000,000",
+        "detail": "Winner $3.6M"
+      }
+    ],
+    "defendingChampion": {
+      "playerId": "46046",
+      "displayName": "Scottie Scheffler",
+      "year": 2025,
+      "displaySeason": "2025",
+      "score": "-16",
+      "total": "264",
+      "title": "Defending Champion",
+      "countryCode": "USA"
+    },
+    "pastChampions": [
+      {
+        "playerId": "46046",
+        "displayName": "Scottie Scheffler",
+        "year": 2025,
+        "score": "-16",
+        "total": "264",
+        "title": null,
+        "countryCode": "USA"
+      }
+    ]
+  }
+}

@@ -17,6 +17,7 @@ import httpx
 
 GRAPHQL_URL = "https://orchestrator.pgatour.com/graphql"
 REST_URL = "https://data-api.pgatour.com"
+CONFIG_URL = "https://orchestrator-config.pgatour.com"
 _DEFAULT_API_KEY = "da2-gsrx5bibzbb4njvhl7t37wqyl4"
 
 USER_AGENT = "pgatourPY (https://github.com/WalrusQuant/pgatourPY)"
@@ -190,6 +191,30 @@ def rest_request(path: str) -> Any:
         logger.debug("pgatourpy rest -> %s", path)
 
     context = f"REST {path}"
+    resp = _request_with_retry("GET", url, context=context)
+
+    if resp.status_code >= 400:
+        snippet = (resp.text or "")[:200].replace("\n", " ")
+        raise PgaTourError(
+            f"{context} failed (status={resp.status_code}): {snippet!r}"
+        )
+
+    return _parse_json(resp, context)
+
+
+def config_request(path: str) -> Any:
+    """GET a JSON document from the PGA Tour orchestrator-config host.
+
+    Used for ``web-config`` (this week's tournament IDs) and the other
+    small config documents the frontend reads from the same origin.
+    """
+    url = f"{CONFIG_URL}/{path.lstrip('/')}"
+    if _is_verbose():
+        logger.info("pgatourpy config -> %s", path)
+    else:
+        logger.debug("pgatourpy config -> %s", path)
+
+    context = f"CONFIG {path}"
     resp = _request_with_retry("GET", url, context=context)
 
     if resp.status_code >= 400:

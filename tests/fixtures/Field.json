@@ -1,0 +1,43 @@
+{
+  "field": {
+    "tournamentName": "FedEx St. Jude Championship",
+    "id": "R2026027",
+    "lastUpdated": "2026-08-15",
+    "players": [
+      {
+        "id": "52955",
+        "firstName": "Ludvig",
+        "lastName": "Aberg",
+        "displayName": "\u00c5berg, Ludvig",
+        "shortName": "L. \u00c5berg",
+        "amateur": false,
+        "country": "SWE",
+        "countryFlag": "se",
+        "qualifier": false,
+        "alternate": false,
+        "withdrawn": false,
+        "status": "IN",
+        "owgr": "16",
+        "rankingPoints": "3.2"
+      }
+    ],
+    "alternates": [
+      {
+        "id": "99999",
+        "firstName": "Alt",
+        "lastName": "Player",
+        "displayName": "Player, Alt",
+        "shortName": "A. Player",
+        "amateur": false,
+        "country": "USA",
+        "countryFlag": "us",
+        "qualifier": false,
+        "alternate": true,
+        "withdrawn": false,
+        "status": "ALT",
+        "owgr": null,
+        "rankingPoints": null
+      }
+    ]
+  }
+}

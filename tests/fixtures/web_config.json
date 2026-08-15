@@ -1,0 +1,28 @@
+{
+  "defaultTournaments": {
+    "R": [
+      {
+        "id": "R2026027",
+        "leaderboardId": "R2026027"
+      }
+    ],
+    "Y": [
+      {
+        "id": "Y2026018",
+        "leaderboardId": "Y2026018"
+      }
+    ],
+    "S": [
+      {
+        "id": "S2026619",
+        "leaderboardId": "S2026619"
+      }
+    ],
+    "H": [
+      {
+        "id": "H2026027",
+        "leaderboardId": "H2026027"
+      }
+    ]
+  }
+}

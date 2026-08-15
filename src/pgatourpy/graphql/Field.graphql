@@ -1,0 +1,32 @@
+query Field($fieldId: ID!, $includeWithdrawn: Boolean, $changesOnly: Boolean) {
+  field(id: $fieldId, includeWithdrawn: $includeWithdrawn, changesOnly: $changesOnly) {
+    tournamentName
+    id
+    lastUpdated
+    message
+    standingsHeader
+    players {
+      ...FieldPlayer
+    }
+    alternates {
+      ...FieldPlayer
+    }
+  }
+}
+
+fragment FieldPlayer on PlayerField {
+  id
+  firstName
+  lastName
+  shortName
+  displayName
+  amateur
+  country
+  countryFlag
+  qualifier
+  alternate
+  withdrawn
+  status
+  owgr
+  rankingPoints
+}

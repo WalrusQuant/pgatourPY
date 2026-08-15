@@ -38,11 +38,14 @@ leaderboard_inner = {
     "players": [
         {
             "player": {
-                "id": "39971",
+                "id": "34046",
                 "firstName": "Jordan",
                 "lastName": "Spieth",
                 "displayName": "Jordan Spieth",
+                "shortName": "J. Spieth",
                 "country": "USA",
+                "countryFlag": "us",
+                "amateur": False,
             },
             "scoringData": {
                 "position": "T1",
@@ -53,6 +56,15 @@ leaderboard_inner = {
                 "scoreSort": "-3",
                 "currentRound": 4,
                 "playerState": "ACTIVE",
+                "teeTime": 1773928800000,
+                "courseId": "513",
+                "groupNumber": 34,
+                "backNine": False,
+                "movementDirection": "UP",
+                "movementAmount": "2",
+                "totalStrokes": "272",
+                "official": "1",
+                "projected": "1",
                 "rounds": ["68", "70", "67", "67"],
             },
         },
@@ -535,8 +547,16 @@ _write("shotDetailsV4Compressed", {
 _write("oddsToWinCompressed", {
     "oddsToWinCompressed": {"payload": _compress({
         "players": [
-            {"id": "39971", "odds": "+1200", "displayName": "Jordan Spieth"},
-            {"id": "52955", "odds": "+800", "displayName": "Ludvig Aberg"},
+            {
+                "playerId": "34046", "odds": "+1200", "displayName": "Jordan Spieth",
+                "oddsSort": 13, "oddsDirection": "DOWN", "optionId": "1",
+                "url": "https://example.com/odds/34046",
+            },
+            {
+                "playerId": "52955", "odds": "+800", "displayName": "Ludvig Aberg",
+                "oddsSort": 9, "oddsDirection": "UP", "optionId": "2",
+                "url": "https://example.com/odds/52955",
+            },
         ]
     })}
 })
@@ -619,6 +639,323 @@ _write("speed_rounds_R", {"tour": "R", "videos": [{"id": "sr1", "title": "Speed 
 # ---------------------------------------------------------------------------
 # Scorecard stats comparison
 # ---------------------------------------------------------------------------
+
+_write("web_config", {
+    "defaultTournaments": {
+        "R": [{"id": "R2026027", "leaderboardId": "R2026027"}],
+        "Y": [{"id": "Y2026018", "leaderboardId": "Y2026018"}],
+        "S": [{"id": "S2026619", "leaderboardId": "S2026619"}],
+        "H": [{"id": "H2026027", "leaderboardId": "H2026027"}],
+    }
+})
+
+_write("player_results_pills", {
+    "playerId": "52955",
+    "resultPills": [
+        {
+            "label": "Season",
+            "queryArg": "season",
+            "options": [
+                {"value": "2026", "label": "2026", "selected": True},
+                {"value": "2025", "label": "2025", "selected": False},
+            ],
+        }
+    ],
+    "resultsData": [
+        {
+            "title": "Results & Scorecards",
+            "headers": [{"label": "Tournament"}, {"label": "Position"}],
+            "data": [
+                {"tournamentId": "R2026027", "fields": ["FedEx St. Jude", "4"]},
+            ],
+        }
+    ],
+})
+
+_write("player_results_2025", {
+    "playerId": "52955",
+    "resultPills": [
+        {
+            "label": "Season",
+            "queryArg": "season",
+            "options": [
+                {"value": "2026", "label": "2026", "selected": False},
+                {"value": "2025", "label": "2025", "selected": True},
+            ],
+        }
+    ],
+    "resultsData": [
+        {
+            "title": "Results & Scorecards",
+            "headers": [{"label": "Tournament"}, {"label": "Position"}],
+            "data": [
+                {"tournamentId": "R2025007", "fields": ["Genesis", "1"]},
+                {"tournamentId": "R2025027", "fields": ["St. Jude", "T10"]},
+            ],
+        }
+    ],
+})
+
+_write("Field", {
+    "field": {
+        "tournamentName": "FedEx St. Jude Championship",
+        "id": "R2026027",
+        "lastUpdated": "2026-08-15",
+        "players": [
+            {
+                "id": "52955", "firstName": "Ludvig", "lastName": "Aberg",
+                "displayName": "Åberg, Ludvig", "shortName": "L. Åberg",
+                "amateur": False, "country": "SWE", "countryFlag": "se",
+                "qualifier": False, "alternate": False, "withdrawn": False,
+                "status": "IN", "owgr": "16", "rankingPoints": "3.2",
+            }
+        ],
+        "alternates": [
+            {
+                "id": "99999", "firstName": "Alt", "lastName": "Player",
+                "displayName": "Player, Alt", "shortName": "A. Player",
+                "amateur": False, "country": "USA", "countryFlag": "us",
+                "qualifier": False, "alternate": True, "withdrawn": False,
+                "status": "ALT", "owgr": None, "rankingPoints": None,
+            }
+        ],
+    }
+})
+
+_write("FieldStats", {
+    "fieldStats": {
+        "tournamentId": "R2026027",
+        "fieldStatType": "CURRENT_FORM",
+        "statHeaders": [],
+        "players": [
+            {
+                "__typename": "FieldStatCurrentForm",
+                "playerId": "52955",
+                "totalRounds": 12,
+                "tournamentResults": [
+                    {"name": "Wyndham", "position": "T5", "score": "-12", "season": 2026}
+                ],
+                "strokesGainedHeader": ["Total", "OTT"],
+                "strokesGained": [
+                    {"statId": "02675", "statValue": "1.20"},
+                    {"statId": "02567", "statValue": "0.40"},
+                ],
+            }
+        ],
+    }
+})
+
+_write("LeaderboardHoleByHole", {
+    "leaderboardHoleByHole": {
+        "tournamentId": "R2026027",
+        "tournamentName": "FedEx St. Jude Championship",
+        "currentRound": 3,
+        "holeHeaders": [{"holeNumber": 1, "hole": "1", "par": 4}],
+        "playerData": [
+            {
+                "playerId": "52955",
+                "out": "32", "in": "34", "total": "66", "totalToPar": "-4",
+                "courseId": "513", "courseCode": "SW",
+                "scores": [
+                    {
+                        "holeNumber": 1, "par": 4, "yardage": 434,
+                        "sequenceNumber": 1, "score": "3", "status": "BIRDIE",
+                        "roundScore": "-1",
+                    }
+                ],
+            }
+        ],
+    }
+})
+
+_write("TournamentPastResults", {
+    "tournamentPastResults": {
+        "id": "R2026027",
+        "availableSeasons": [{"year": 2025, "displaySeason": "2025"}],
+        "players": [
+            {
+                "id": "52955",
+                "position": "T10",
+                "total": "268",
+                "parRelativeScore": "-12",
+                "additionalData": ["750"],
+                "player": {
+                    "id": "52955", "firstName": "Ludvig", "lastName": "Aberg",
+                    "displayName": "Ludvig Aberg", "shortName": "L. Aberg",
+                    "amateur": False, "country": "SWE", "countryFlag": "se",
+                },
+                "rounds": [
+                    {"score": "66", "parRelativeScore": "-4"},
+                    {"score": "68", "parRelativeScore": "-2"},
+                ],
+            }
+        ],
+    }
+})
+
+_write("TournamentOverview", {
+    "tournamentOverview": {
+        "ticketsURL": "https://example.com/tickets",
+        "tourcastURL": "https://example.com/tourcast",
+        "shareURL": "https://example.com/share",
+        "eventGuideURL": "https://example.com/guide",
+        "overview": [
+            {"label": "Purse", "value": "$20,000,000", "detail": "Winner $3.6M"},
+        ],
+        "defendingChampion": {
+            "playerId": "46046", "displayName": "Scottie Scheffler",
+            "year": 2025, "displaySeason": "2025", "score": "-16",
+            "total": "264", "title": "Defending Champion", "countryCode": "USA",
+        },
+        "pastChampions": [
+            {
+                "playerId": "46046", "displayName": "Scottie Scheffler",
+                "year": 2025, "score": "-16", "total": "264",
+                "title": None, "countryCode": "USA",
+            }
+        ],
+    }
+})
+
+_write("Weather", {
+    "weather": {
+        "title": "Weather",
+        "hourly": [
+            {
+                "title": "2 PM", "condition": "Sunny",
+                "windDirection": "SW", "windSpeedMPH": "8", "windSpeedKPH": "13",
+                "humidity": 40, "precipitation": "0%",
+                "temperature": {"__typename": "StandardWeatherTemp", "tempF": 91, "tempC": 33},
+            }
+        ],
+        "daily": [
+            {
+                "title": "Sat", "condition": "Partly Cloudy",
+                "windDirection": "S", "windSpeedMPH": "10", "windSpeedKPH": "16",
+                "humidity": 45, "precipitation": "10%",
+                "temperature": {
+                    "__typename": "RangeWeatherTemp",
+                    "minTempF": 74, "minTempC": 23, "maxTempF": 93, "maxTempC": 34,
+                },
+            }
+        ],
+    }
+})
+
+_write("CourseStats", {
+    "courseStats": {
+        "tournamentId": "R2026027",
+        "courses": [
+            {
+                "courseId": "513", "courseName": "TPC Southwind",
+                "courseCode": "SW", "hostCourse": True,
+                "roundHoleStats": [
+                    {
+                        "roundHeader": "R1", "roundNum": 1, "live": False,
+                        "holeStats": [
+                            {
+                                "__typename": "CourseHoleStats",
+                                "courseHoleNum": 1, "parValue": 4, "yards": 434,
+                                "scoringAverage": "3.95", "scoringAverageDiff": "-0.05",
+                                "eagles": 0, "birdies": 20, "pars": 40,
+                                "bogeys": 9, "doubleBogey": 0, "rank": 12, "live": False,
+                            }
+                        ],
+                    }
+                ],
+            }
+        ],
+    }
+})
+
+_write("CourseStatsOverview", {
+    "courseStatsOverview": {
+        "tourCode": "R", "year": 2026,
+        "categories": [
+            {
+                "header": "Toughest Holes",
+                "items": [
+                    {
+                        "displayName": "TPC Southwind #14",
+                        "rank": 1,
+                        "details": [
+                            {"label": "Scoring Avg", "value": "4.35"},
+                            {"label": "Par", "value": "4"},
+                        ],
+                    }
+                ],
+            }
+        ],
+    }
+})
+
+_write("SignatureStandings", {
+    "signatureStandings": {
+        "tournamentID": "R2026007",
+        "infoTitle": "Aon Next 10",
+        "official": {
+            "title": "Official",
+            "players": [
+                {
+                    "__typename": "SignaturePlayer",
+                    "playerId": "52955", "displayName": "Ludvig Aberg",
+                    "shortName": "L. Aberg", "countryName": "Sweden",
+                    "countryFlag": "se", "started": True,
+                    "projected": "8", "projectedPoints": "1200",
+                    "movementAmount": "1", "movementDirection": "UP",
+                },
+                {"__typename": "SignatureInfoLine", "text": "cut line"},
+            ],
+        },
+        "interim": {"players": []},
+    }
+})
+
+_write("PriorityRankings", {
+    "priorityRankings": {
+        "tourCode": "R", "year": 2026, "displayYear": "2026",
+        "throughText": "Wyndham Championship",
+        "categories": [
+            {
+                "displayName": "Tournament Winners",
+                "detail": "Winners from the past two seasons",
+                "players": [
+                    {"playerId": "46046", "displayName": "Scottie Scheffler"},
+                ],
+            }
+        ],
+    }
+})
+
+_write("odds_markets", {
+    "availableMarkets": [
+        {
+            "id": 2574, "name": "Outright Winner", "book": "fanduel",
+            "displayName": "To Win", "marketType": "ODDS_TO_WIN",
+        },
+        {
+            "id": 2578, "name": "Matchup Props", "book": "fanduel",
+            "displayName": "Matchups", "marketType": "MATCHUP",
+        },
+    ]
+})
+
+_write("player_odds", {
+    "playerMarkets": [
+        {
+            "subMarketName": "Finish",
+            "marketDisplayName": "Finishes",
+            "marketType": "FINISH",
+            "layoutType": "MAIN_TABLE",
+            "oddsDataGroup": [
+                {
+                    "title": "Top 10 Finish (Incl. Ties)",
+                    "odds": [{"odds": "+250", "label": "Yes"}],
+                }
+            ],
+        }
+    ]
+})
 
 _write("ScorecardStatsComparisonCategories", {
     "scorecardStatsComparison": {

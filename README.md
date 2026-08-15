@@ -13,23 +13,26 @@ pip install git+https://github.com/WalrusQuant/pgatourPY.git
 ```python
 import pgatourpy as pga
 
+# This week's tournament
+tid = pga.pga_current_tournament()
+
 # Current leaderboard
-pga.pga_leaderboard("R2026475")
+pga.pga_leaderboard(tid)
 
 # Strokes Gained: Total rankings
 pga.pga_stats("02675")
 
-# Full player directory (2,400+ players)
+# Full player directory (2,700+ players)
 pga.pga_players()
 
 # Hole-by-hole scorecard
-pga.pga_scorecard("R2026475", "39971")
+pga.pga_scorecard(tid, "34046")
 
 # Shot-level tracking with coordinates
-pga.pga_shot_details("R2026475", "39971", round=1)
+pga.pga_shot_details(tid, "34046", round=1)
 
 # Full season schedule with dates, purse, champions
-pga.pga_schedule(2025)
+pga.pga_schedule(2026)
 ```
 
 ## Functions
@@ -38,21 +41,32 @@ pga.pga_schedule(2025)
 
 | Function | Description |
 |---|---|
-| `pga_leaderboard(tournament_id)` | Full leaderboard with scores, positions, and round-by-round results |
+| `pga_current_tournament(tour)` | This week's tournament ID from the PGA Tour web-config |
+| `pga_leaderboard(tournament_id)` | Full leaderboard with scores, positions, movement, and cup ranks |
 | `pga_current_leaders(tournament_id)` | Quick top-15 snapshot for in-progress tournaments |
+| `pga_leaderboard_holes(tournament_id, round)` | Hole-by-hole scores for the whole field |
+| `pga_field(tournament_id)` | Tournament field with OWGR, withdrawn, and alternate flags |
+| `pga_field_stats(tournament_id, field_stat_type)` | Current-form or course-fit stats for the field |
 | `pga_tee_times(tournament_id)` | Tee time groupings with start tees and player assignments |
 | `pga_scorecard(tournament_id, player_id)` | Hole-by-hole scorecard with par, score, yardage, and status |
 | `pga_shot_details(tournament_id, player_id, round)` | Shot-by-shot tracking data with coordinates, distances, and play-by-play |
 | `pga_odds(tournament_id)` | Betting odds to win for the tournament field |
+| `pga_odds_markets(tournament_id)` | Available betting-market catalog (To Win, matchups, finishes, …) |
+| `pga_player_odds(tournament_id, player_id)` | FanDuel markets for one player |
 | `pga_coverage(tournament_id)` | Broadcast and streaming schedule with networks and time windows |
+| `pga_weather(tournament_id)` | Hourly and daily forecast |
+| `pga_course_stats(tournament_id)` | Per-hole scoring averages for the host course |
 
 ### Statistics & Standings
 
 | Function | Description |
 |---|---|
-| `pga_stats(stat_id, year, tour, event_query=None)` | Any of 300+ stats with full player rankings (2004–2026). Accepts a list of `stat_id` and/or `year` and loops client-side. |
+| `pga_stats(stat_id, year, tour, event_query=None)` | Any of 400+ stats with full player rankings (2004–2026). Accepts a list of `stat_id` and/or `year` and loops client-side. |
 | `pga_fedex_cup(year, tour, event_query=None)` | FedExCup standings with projected and official rankings |
+| `pga_signature_standings(tour)` | Signature Event / Aon standings |
+| `pga_priority_rankings(tour, year)` | Exemption / priority ranking categories |
 | `pga_scorecard_comparison(tournament_id, player_ids, category)` | Head-to-head stat comparison between players |
+| `pga_course_stats_overview(tour, year)` | Season course-stats hub |
 
 ### Players & Tournaments
 
@@ -61,6 +75,8 @@ pga.pga_schedule(2025)
 | `pga_players(tour)` | Full player directory with name, country, age, and active status |
 | `pga_tournaments(ids)` | Tournament metadata including location, courses, weather, and format |
 | `pga_schedule(year, tour)` | Full season schedule with dates, purse, course, champion, and FedExCup points |
+| `pga_tournament_overview(tournament_id)` | Overview tiles, defending champion, past champions |
+| `pga_tournament_past_results(tournament_id, year)` | Historical finishes for an event |
 
 ### Player Profiles
 
@@ -68,7 +84,7 @@ pga.pga_schedule(2025)
 |---|---|
 | `pga_player_profile(player_id)` | Overview with career highlights, wins, earnings, world rank, bio basics |
 | `pga_player_career(player_id)` | Career achievements: starts, cuts, wins, finish distribution, earnings |
-| `pga_player_results(player_id)` | Tournament-by-tournament results with round scores, FedExCup points, earnings |
+| `pga_player_results(player_id, season)` | Tournament-by-tournament results. Omit `season` for every year, or pass one year / a list |
 | `pga_player_stats(player_id)` | Full stat profile (131 stats with ranks) in a single call |
 | `pga_player_bio(player_id)` | Biographical text, amateur highlights |
 | `pga_player_tournament_status(player_id)` | Live tournament status (position, score, thru) if currently playing |
@@ -89,7 +105,7 @@ pga.pga_schedule(2025)
 
 | Variable | Description |
 |---|---|
-| `STAT_IDS` | pandas DataFrame of 340 stat IDs with names, categories, and subcategories |
+| `STAT_IDS` | pandas DataFrame of 400+ stat IDs with names, categories, and subcategories |
 
 ## Tour Codes
 
@@ -98,6 +114,7 @@ pga.pga_schedule(2025)
 | `"R"` | PGA Tour |
 | `"S"` | PGA Tour Champions |
 | `"H"` | Korn Ferry Tour |
+| `"Y"` | PGA Tour Americas |
 
 ## Examples
 
@@ -124,7 +141,7 @@ print(results.head())  # columns are snake_cased API headers, deduped
 # Career, bio, tournament status
 career = pga.pga_player_career("52955")
 bio = pga.pga_player_bio("52955")
-status = pga.pga_player_tournament_status("39971")  # if playing
+status = pga.pga_player_tournament_status("34046")  # if playing
 ```
 
 ### Strokes Gained Analysis
@@ -161,16 +178,18 @@ driving = pga.STAT_IDS[
 ```python
 import pgatourpy as pga
 
-tournament = pga.pga_tournaments("R2026475")
-leaderboard = pga.pga_leaderboard("R2026475")
-tee_times = pga.pga_tee_times("R2026475")
-coverage = pga.pga_coverage("R2026475")
-odds = pga.pga_odds("R2026475")
+tid = pga.pga_current_tournament()
+tournament = pga.pga_tournaments(tid)
+leaderboard = pga.pga_leaderboard(tid)
+field = pga.pga_field(tid)
+tee_times = pga.pga_tee_times(tid)
+coverage = pga.pga_coverage(tid)
+odds = pga.pga_odds(tid)
 
 # Deep dive on a player
-scorecard = pga.pga_scorecard("R2026475", "39971")
-shots = pga.pga_shot_details("R2026475", "39971", round=1)
-videos = pga.pga_tourcast_videos("R2026475", "39971", round=1)
+scorecard = pga.pga_scorecard(tid, "34046")
+shots = pga.pga_shot_details(tid, "34046", round=1)
+videos = pga.pga_tourcast_videos(tid, "34046", round=1)
 ```
 
 ### Season Schedule
@@ -223,6 +242,7 @@ This package wraps the PGA Tour's GraphQL and REST APIs:
 
 - **GraphQL endpoint:** `https://orchestrator.pgatour.com/graphql`
 - **REST endpoint:** `https://data-api.pgatour.com`
+- **Config endpoint:** `https://orchestrator-config.pgatour.com` (this week's tournament IDs)
 - **Authentication:** Uses a public API key embedded in the PGA Tour frontend (no user authentication required)
 - **Rate limiting:** Built-in throttling at 10 requests/second
 - **HTTP client:** [httpx](https://www.python-httpx.org/) (sync)

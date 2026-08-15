@@ -2,7 +2,15 @@
 
 ## Live Tournament Data
 
+::: pgatourpy.pga_current_tournament
+
 ::: pgatourpy.pga_leaderboard
+
+::: pgatourpy.pga_field
+
+::: pgatourpy.pga_field_stats
+
+::: pgatourpy.pga_leaderboard_holes
 
 ::: pgatourpy.pga_current_leaders
 
@@ -14,7 +22,15 @@
 
 ::: pgatourpy.pga_odds
 
+::: pgatourpy.pga_odds_markets
+
+::: pgatourpy.pga_player_odds
+
 ::: pgatourpy.pga_coverage
+
+::: pgatourpy.pga_weather
+
+::: pgatourpy.pga_course_stats
 
 ## Statistics & Standings
 
@@ -22,7 +38,13 @@
 
 ::: pgatourpy.pga_fedex_cup
 
+::: pgatourpy.pga_signature_standings
+
+::: pgatourpy.pga_priority_rankings
+
 ::: pgatourpy.pga_scorecard_comparison
+
+::: pgatourpy.pga_course_stats_overview
 
 ## Players & Tournaments
 
@@ -31,6 +53,10 @@
 ::: pgatourpy.pga_tournaments
 
 ::: pgatourpy.pga_schedule
+
+::: pgatourpy.pga_tournament_overview
+
+::: pgatourpy.pga_tournament_past_results
 
 ## Player Profiles
 

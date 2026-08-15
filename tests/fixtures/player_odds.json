@@ -1,0 +1,21 @@
+{
+  "playerMarkets": [
+    {
+      "subMarketName": "Finish",
+      "marketDisplayName": "Finishes",
+      "marketType": "FINISH",
+      "layoutType": "MAIN_TABLE",
+      "oddsDataGroup": [
+        {
+          "title": "Top 10 Finish (Incl. Ties)",
+          "odds": [
+            {
+              "odds": "+250",
+              "label": "Yes"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
